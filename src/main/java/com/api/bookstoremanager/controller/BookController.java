@@ -2,6 +2,7 @@ package com.api.bookstoremanager.controller;
 
 import com.api.bookstoremanager.dto.BookDTO;
 import com.api.bookstoremanager.dto.MessageResponseDTO;
+import com.api.bookstoremanager.exception.BookNotFoundException;
 import com.api.bookstoremanager.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,8 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public BookDTO findById(@PathVariable Long id){
-        return bookService.findById(id);
+    public BookDTO findById(@PathVariable Long id) throws BookNotFoundException {
+        return bookService. findById(id);
 
     }
 

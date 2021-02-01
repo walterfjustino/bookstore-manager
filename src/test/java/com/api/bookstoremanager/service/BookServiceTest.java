@@ -3,6 +3,7 @@ package com.api.bookstoremanager.service;
 import com.api.bookstoremanager.BookUtils;
 import com.api.bookstoremanager.dto.BookDTO;
 import com.api.bookstoremanager.entity.Book;
+import com.api.bookstoremanager.exception.BookNotFoundException;
 import com.api.bookstoremanager.repository.BookRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class BookServiceTest {
     private BookService bookService;
 
     @Test
-    void whenGivenExistingIdThenReturnThisBook() {
+    void whenGivenExistingIdThenReturnThisBook() throws BookNotFoundException {
         Book expectedFoundBook = BookUtils.createFakeBook();
 
         Mockito.when(bookRepository.findById(expectedFoundBook.getId())).thenReturn(Optional.of(expectedFoundBook));
