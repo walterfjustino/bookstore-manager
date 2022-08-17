@@ -17,15 +17,11 @@ import java.util.Optional;
 @Service
 public class BookService {
 
+    @Autowired
     private BookRepository bookRepository;
 
-    private final BookMapper bookMapper = BookMapper.INSTANCE;
-
     @Autowired
-    public BookService(BookRepository bookRepository) {
-
-        this.bookRepository = bookRepository;
-    }
+    private BookMapper bookMapper;
 
     @PostMapping
     public MessageResponseDTO create(BookDTO bookDTO){

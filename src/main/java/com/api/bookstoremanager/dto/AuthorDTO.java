@@ -17,7 +17,6 @@ import javax.validation.constraints.Size;
 public class AuthorDTO {
 
 
-
     private Long id;
 
     @NotBlank
