@@ -1,4 +1,4 @@
-package com.api.bookstoremanager.dto;
+package com.api.bookstoremanager.author.dto;
 
 
 import lombok.AllArgsConstructor;

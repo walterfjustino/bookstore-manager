@@ -1,8 +1,8 @@
-package com.api.bookstoremanager.repository;
+package com.api.bookstoremanager.author.repository;
 
 
 
-import com.api.bookstoremanager.entity.Author;
+import com.api.bookstoremanager.author.entity.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

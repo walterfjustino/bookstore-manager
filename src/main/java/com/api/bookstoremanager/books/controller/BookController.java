@@ -1,9 +1,9 @@
-package com.api.bookstoremanager.controller;
+package com.api.bookstoremanager.books.controller;
 
-import com.api.bookstoremanager.dto.BookDTO;
+import com.api.bookstoremanager.books.dto.BookDTO;
 import com.api.bookstoremanager.dto.MessageResponseDTO;
-import com.api.bookstoremanager.exception.BookNotFoundException;
-import com.api.bookstoremanager.service.BookService;
+import com.api.bookstoremanager.books.exception.BookNotFoundException;
+import com.api.bookstoremanager.books.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +13,12 @@ import javax.validation.Valid;
 @RequestMapping("api/v1/books")
 public class BookController {
 
-    private final BookService bookService;
-
     @Autowired
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
-
-
+    private BookService bookService;
 
     @PostMapping
     public MessageResponseDTO create(@RequestBody @Valid BookDTO bookDTO){
+
         return bookService.create(bookDTO) ;
     }
 

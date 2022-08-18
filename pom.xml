@@ -91,7 +91,7 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.4.1.Final</version>
+            <version>1.4.2.Final</version>
          </dependency>
         <dependency>
             <groupId>com.github.javafaker</groupId>
@@ -117,12 +117,12 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.16</version>
+                            <version>1.18.24</version>
                         </path>
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>1.4.1.Final</version>
+                            <version>1.4.2.Final</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
