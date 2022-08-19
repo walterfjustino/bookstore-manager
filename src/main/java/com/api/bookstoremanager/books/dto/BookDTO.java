@@ -3,7 +3,6 @@ package com.api.bookstoremanager.books.dto;
 
 import com.api.bookstoremanager.author.dto.AuthorDTO;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDTO {
