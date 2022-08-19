@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -19,13 +21,12 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
     @Autowired
-    private BookMapper bookMapper;
+    private BookMapper mapper;
 
-    @PostMapping
     @Override
     public MessageResponseDTO create(BookDTO bookDTO){
 
-        Book bookToSave = bookMapper.toModel(bookDTO);
+        Book bookToSave = mapper.toModel(bookDTO);
 
         Book savedBook = bookRepository.save(bookToSave);
         return MessageResponseDTO.builder()
@@ -33,10 +34,16 @@ public class BookServiceImpl implements BookService {
                 .build();
     }
 
-    @GetMapping
+
     @Override
     public BookDTO findById(Long id) throws BookNotFoundException {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-        return bookMapper.toDTO(book);
+        var book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+        return mapper.toDTO(book);
+    }
+
+
+    @Override
+    public List<Book> findAll() {
+        return bookRepository.findAll();
     }
 }
