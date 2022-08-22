@@ -18,17 +18,17 @@ public class AuthorController implements AuthorControllerDocs{
     @Autowired
     private AuthorServiceImpl service;
 
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public AuthorDTO create(@RequestBody @Valid AuthorDTO authorDTO) {
-//        return service.create(authorDTO);
-//    }
-
-
-
     @PostMapping
-    public ResponseEntity<AuthorDTO> create(@Valid @RequestBody AuthorDTO authorDTO){
-        var createAuthor = service.create(authorDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createAuthor);
+    @ResponseStatus(HttpStatus.CREATED)
+    public AuthorDTO create(@RequestBody @Valid AuthorDTO authorDTO) {
+        return service.create(authorDTO);
     }
+
+
+
+//    @PostMapping
+//    public ResponseEntity<AuthorDTO> create(@Valid @RequestBody AuthorDTO authorDTO){
+//        var createAuthor = service.create(authorDTO);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createAuthor);
+//    }
 }
