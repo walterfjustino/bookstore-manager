@@ -4,6 +4,7 @@ package com.api.bookstoremanager.author.builder;
 import com.api.bookstoremanager.author.dto.AuthorDTO;
 import lombok.Builder;
 
+
 @Builder
 public class AuthorDTOBuilder {
 
@@ -11,13 +12,12 @@ public class AuthorDTOBuilder {
     private final Long id = 1L;
 
     @Builder.Default
-    private final String name = "Sharivan";
+    private final String name = "Jiraya";
 
     @Builder.Default
-    private final Integer age = 30;
+    private final int age = 32;
 
-    public AuthorDTO buildAuthorDTO(){
+    public AuthorDTO buildAuthorDTO() {
         return new AuthorDTO(id, name, age);
     }
-
 }
