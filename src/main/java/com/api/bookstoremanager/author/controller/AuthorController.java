@@ -2,6 +2,7 @@ package com.api.bookstoremanager.author.controller;
 
 import com.api.bookstoremanager.author.dto.AuthorDTO;
 import com.api.bookstoremanager.author.service.AuthorServiceImpl;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,8 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/authors")
-public class AuthorController {
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+public class AuthorController implements AuthorControllerDocs{
 
     @Autowired
     private AuthorServiceImpl service;
