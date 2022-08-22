@@ -30,7 +30,7 @@ public class AuthorServiceImplTest {
     public static final AuthorMapper mapper = AuthorMapper.INSTANCE;
 
     @Mock
-    private AuthorRepository authorRepository;
+    private AuthorRepository repository;
 
     @InjectMocks
     private AuthorServiceImpl service;
@@ -50,8 +50,8 @@ public class AuthorServiceImplTest {
         Author expectedCreatedAuthor = mapper.toModel(expectedAuthorToCreateDTO);
 
         // @When
-        when(authorRepository.save(expectedCreatedAuthor)).thenReturn(expectedCreatedAuthor);
-        when(authorRepository.findByName(expectedAuthorToCreateDTO.getName())).thenReturn(Optional.empty());
+        when(repository.save(expectedCreatedAuthor)).thenReturn(expectedCreatedAuthor);
+        when(repository.findByName(expectedAuthorToCreateDTO.getName())).thenReturn(Optional.empty());
 
         AuthorDTO createdAuthorDTO = service.create(expectedAuthorToCreateDTO);
         // @Then
@@ -66,9 +66,24 @@ public class AuthorServiceImplTest {
         Author expectedCreatedAuthor = mapper.toModel(expectedAuthorToCreateDTO);
 
         // @When
-        when(authorRepository.findByName(expectedAuthorToCreateDTO.getName())).thenReturn(Optional.of(expectedCreatedAuthor));
+        when(repository.findByName(expectedAuthorToCreateDTO.getName())).thenReturn(Optional.of(expectedCreatedAuthor));
 
          // @Then
         assertThrows(AuthorAlreadyExistsException.class, ()-> service.create(expectedAuthorToCreateDTO));
+    }
+
+    @Test
+    @DisplayName("Pesquisa um Author pelo id")
+    void when_Valid_ID_Is_Given_Then_An_Author_Should_Be_Returned() {
+        // @Given
+        AuthorDTO expectedFoundAuthorDTO = authorDtoBuilder.buildAuthorDTO();
+        Author expectedFoundAuthor = mapper.toModel(expectedFoundAuthorDTO);
+
+        // @When
+        when(repository.findById(expectedFoundAuthorDTO.getId())).thenReturn(Optional.of(expectedFoundAuthor));
+       var foundAuthorDTO= service.findById(expectedFoundAuthorDTO.getId());
+
+        // @Then
+        assertThat(foundAuthorDTO, is(equalTo(expectedFoundAuthorDTO)));
     }
 }

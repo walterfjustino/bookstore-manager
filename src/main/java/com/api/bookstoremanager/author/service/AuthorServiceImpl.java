@@ -2,6 +2,7 @@ package com.api.bookstoremanager.author.service;
 
 import com.api.bookstoremanager.author.dto.AuthorDTO;
 import com.api.bookstoremanager.author.exception.AuthorAlreadyExistsException;
+import com.api.bookstoremanager.author.exception.AuthorNotFoundException;
 import com.api.bookstoremanager.author.mapper.AuthorMapper;
 import com.api.bookstoremanager.author.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,13 @@ public class AuthorServiceImpl implements AuthorService {
         var authorToCreate = mapper.toModel(authorDTO);
         var createdAuthor = repository.save(authorToCreate);
         return mapper.toDTO(createdAuthor);
+    }
+
+    @Override
+    public AuthorDTO findById(Long id) {
+        var foundAuthor= repository.findById(id)
+                .orElseThrow(()-> new AuthorNotFoundException(id));
+        return mapper.toDTO(foundAuthor);
     }
 
     private void verifyIfExists(String authorName) {

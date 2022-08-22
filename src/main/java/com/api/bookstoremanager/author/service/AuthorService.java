@@ -6,4 +6,6 @@ public interface AuthorService {
 
     AuthorDTO create(AuthorDTO authorDTO);
 
+    AuthorDTO findById(Long id);
+
 }
