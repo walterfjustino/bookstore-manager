@@ -6,6 +6,7 @@ import com.api.bookstoremanager.author.entity.Author;
 import com.api.bookstoremanager.author.exception.AuthorAlreadyExistsException;
 import com.api.bookstoremanager.author.mapper.AuthorMapper;
 import com.api.bookstoremanager.author.repository.AuthorRepository;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,11 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -85,5 +86,34 @@ public class AuthorServiceImplTest {
 
         // @Then
         assertThat(foundAuthorDTO, is(equalTo(expectedFoundAuthorDTO)));
+    }
+
+    @Test
+    @DisplayName("Lista todos os Authores")
+    void when_List_Author_Is_Called_Then_A_List_Authors_Should_Be_Returned() {
+        // @Given
+        AuthorDTO expectedFoundAuthorDTO = authorDtoBuilder.buildAuthorDTO();
+        Author expectedFoundAuthor = mapper.toModel(expectedFoundAuthorDTO);
+
+        // @When
+        when(repository.findAll()).thenReturn(Collections.singletonList(expectedFoundAuthor));
+        var foundAuthorsDTO= service.findAll();
+
+        // @Then
+        assertThat(foundAuthorsDTO.size(), is(1));
+        assertThat(foundAuthorsDTO.get(0), is(equalTo(expectedFoundAuthorDTO)));
+    }
+
+    @Test
+    @DisplayName("Lista vazia se não houver authores cadastrados")
+    void when_List_Author_Ia_Called_Then_An_Empty_List_Authors_Should_Be_Returned() {
+        // @Given
+
+        // @When
+        when(repository.findAll()).thenReturn(Collections.EMPTY_LIST);
+        var foundAuthorsDTO= service.findAll();
+
+        // @Then
+        assertThat(foundAuthorsDTO.size(), is(0));
     }
 }
