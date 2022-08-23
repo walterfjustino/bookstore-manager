@@ -6,7 +6,6 @@ import com.api.bookstoremanager.author.entity.Author;
 import com.api.bookstoremanager.author.exception.AuthorAlreadyExistsException;
 import com.api.bookstoremanager.author.mapper.AuthorMapper;
 import com.api.bookstoremanager.author.repository.AuthorRepository;
-import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,9 +18,10 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -115,5 +115,23 @@ public class AuthorServiceImplTest {
 
         // @Then
         assertThat(foundAuthorsDTO.size(), is(0));
+    }
+
+    @Test
+    @DisplayName("Exclui authores cadastrados pelo ID")
+    void when_Valid_Author_Id_Is_Given_Then_It_Should_Be_Deleted() {
+        // @Given
+        AuthorDTO expectedDeletedAuthorDTO = authorDtoBuilder.buildAuthorDTO();
+        Author expectedDeletedAuthor = mapper.toModel(expectedDeletedAuthorDTO);
+
+        // @When
+        var expectedDeleteAuthorId = expectedDeletedAuthorDTO.getId();
+        doNothing().when(repository).deleteById(expectedDeleteAuthorId);
+        when(repository.findById(expectedDeleteAuthorId)).thenReturn(Optional.of(expectedDeletedAuthor));
+        service.delete(expectedDeleteAuthorId);
+
+        // @Then
+        verify(repository,times(1)).deleteById(expectedDeleteAuthorId);
+        verify(repository,times(1)).findById(expectedDeleteAuthorId);
     }
 }
