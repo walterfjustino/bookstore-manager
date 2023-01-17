@@ -1,4 +1,4 @@
-package com.api.bookstoremanager.controller;
+package com.api.bookstoremanager.book.controller;
 
 import com.api.bookstoremanager.BookUtils;
 import com.api.bookstoremanager.books.controller.BookController;

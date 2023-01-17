@@ -1,4 +1,4 @@
-package com.api.bookstoremanager.service;
+package com.api.bookstoremanager.book.service;
 
 import com.api.bookstoremanager.BookUtils;
 import com.api.bookstoremanager.books.dto.BookDTO;
