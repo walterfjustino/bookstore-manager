@@ -4,11 +4,18 @@ import com.api.bookstoremanager.author.entity.Author;
 import com.api.bookstoremanager.entity.Auditable;
 import com.api.bookstoremanager.publishers.entity.Publisher;
 import com.api.bookstoremanager.users.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
+@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Book extends Auditable {
 
@@ -24,7 +31,7 @@ public class Book extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "publisher_id")
-    private Publisher publisher;
+    private String publisher;
 
     @ManyToOne
     @JoinColumn(name = "author_id")

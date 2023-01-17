@@ -42,7 +42,6 @@ public class AuthorServiceImpl implements AuthorService {
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
-
     }
 
     @Override

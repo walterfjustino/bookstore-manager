@@ -2,13 +2,19 @@ package com.api.bookstoremanager.author.entity;
 
 import com.api.bookstoremanager.books.entity.Book;
 import com.api.bookstoremanager.entity.Auditable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 
+@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "author")
 public class Author extends Auditable {
