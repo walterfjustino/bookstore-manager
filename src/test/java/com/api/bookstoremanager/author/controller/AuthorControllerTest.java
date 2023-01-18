@@ -2,7 +2,7 @@ package com.api.bookstoremanager.author.controller;
 
 import com.api.bookstoremanager.author.builder.AuthorDTOBuilder;
 import com.api.bookstoremanager.author.service.AuthorServiceImpl;
-import com.api.bookstoremanager.author.utils.JsonCoversionUtils;
+import com.api.bookstoremanager.utils.JsonCoversionUtils;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
@@ -21,7 +20,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.util.Collections;
-import java.util.stream.Stream;
 
 import static org.mockito.Mockito.when;
 

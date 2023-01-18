@@ -1,6 +1,9 @@
 package com.api.bookstoremanager.publishers.service;
 
 import com.api.bookstoremanager.publishers.dto.PublisherDTO;
+import com.api.bookstoremanager.publishers.entity.Publisher;
+import com.api.bookstoremanager.publishers.exception.PublisherAlreadyExistsException;
+import com.api.bookstoremanager.publishers.exception.PublisherNotFoundException;
 import com.api.bookstoremanager.publishers.mapper.PublisherMapper;
 import com.api.bookstoremanager.publishers.repository.PublisherRepository;
 import lombok.AllArgsConstructor;
@@ -22,21 +25,41 @@ public class PublisherServiceImpl implements PublisherService{
 
   @Override
   public PublisherDTO create(PublisherDTO publisherDTO) {
-    return null;
+    verifyIfPublisherExists(publisherDTO.getName(), publisherDTO.getCode());
+    Publisher publisherToCreate = mapper.toModel(publisherDTO);
+    Publisher createdPublisher = repository.save(publisherToCreate);
+    return mapper.toDTO(createdPublisher);
   }
 
   @Override
   public PublisherDTO findById(Long id) {
-    return null;
+    var foundPublisher = verifyAndGetPublisher(id);
+    return mapper.toDTO(foundPublisher);
   }
+
+
 
   @Override
   public List<PublisherDTO> findAll() {
-    return null;
+    return repository.findAll()
+            .stream()
+            .map(mapper::toDTO)
+            .toList();
   }
 
   @Override
   public void delete(Long id) {
+    verifyAndGetPublisher(id);
+    repository.deleteById(id);
+  }
 
+  private void verifyIfPublisherExists(String name, String code ) {
+    repository.findByNameOrCode(name, code)
+            .ifPresent(publisher -> { throw new PublisherAlreadyExistsException(name, code);});
+  }
+
+  private Publisher verifyAndGetPublisher(Long id) {
+    return repository.findById(id)
+            .orElseThrow(() -> new PublisherNotFoundException(id));
   }
 }
