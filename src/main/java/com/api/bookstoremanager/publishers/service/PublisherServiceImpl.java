@@ -31,11 +31,17 @@ public class PublisherServiceImpl implements PublisherService{
     return mapper.toDTO(createdPublisher);
   }
 
-  @Override
-  public PublisherDTO findById(Long id) {
-    var foundPublisher = verifyAndGetPublisher(id);
-    return mapper.toDTO(foundPublisher);
-  }
+//  @Override
+//  public PublisherDTO findById(Long id) {
+//    var foundPublisher = verifyAndGetPublisher(id);
+//    return mapper.toDTO(foundPublisher);
+//  }
+@Override
+public PublisherDTO findById(Long id) {
+  return repository.findById(id)
+          .map(mapper::toDTO)
+          .orElseThrow(() -> new PublisherNotFoundException(id));
+}
 
 
 
@@ -49,7 +55,7 @@ public class PublisherServiceImpl implements PublisherService{
 
   @Override
   public void delete(Long id) {
-    verifyAndGetPublisher(id);
+//    verifyAndGetPublisher(id);
     repository.deleteById(id);
   }
 
@@ -58,8 +64,9 @@ public class PublisherServiceImpl implements PublisherService{
             .ifPresent(publisher -> { throw new PublisherAlreadyExistsException(name, code);});
   }
 
-  private Publisher verifyAndGetPublisher(Long id) {
-    return repository.findById(id)
-            .orElseThrow(() -> new PublisherNotFoundException(id));
-  }
+//  private Publisher verifyAndGetPublisher(Long id) {
+//    return repository.findById(id)
+//            .map(mapper::toDTO)
+//            .orElseThrow(() -> new PublisherNotFoundException(id));
+//  }
 }
