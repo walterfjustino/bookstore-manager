@@ -77,4 +77,23 @@ public class PublisherControllerTest {
                     .content(JsonCoversionUtils.asJsonString(expectedCreatedPublisherDTO)))
             .andExpect(status().isBadRequest());
   }
+
+
+  @Test
+  void when_Get_Is_Called_Then_Status_Ok_It_Should_Be_Returned() throws Exception {
+    //@Given
+    var expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
+
+    //@When
+    when(service.findById(expectedCreatedPublisherDTO.getId())).thenReturn(expectedCreatedPublisherDTO);
+
+    //@Then
+
+    mockMvc.perform(get(PUBLISHERS_API_URL_PATH + "/" + expectedCreatedPublisherDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id", Matchers.is(expectedCreatedPublisherDTO.getId().intValue())))
+            .andExpect(jsonPath("$.name", Matchers.is(expectedCreatedPublisherDTO.getName())))
+            .andExpect(jsonPath("$.code", Matchers.is(expectedCreatedPublisherDTO.getCode())));
+  }
 }
