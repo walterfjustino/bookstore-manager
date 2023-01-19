@@ -17,6 +17,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -80,7 +83,7 @@ public class PublisherControllerTest {
 
 
   @Test
-  void when_Get_Is_Called_Then_Status_Ok_It_Should_Be_Returned() throws Exception {
+  void when_Get_By_Id_Is_Called_Then_Status_Ok_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
 
@@ -88,12 +91,28 @@ public class PublisherControllerTest {
     when(service.findById(expectedCreatedPublisherDTO.getId())).thenReturn(expectedCreatedPublisherDTO);
 
     //@Then
-
     mockMvc.perform(get(PUBLISHERS_API_URL_PATH + "/" + expectedCreatedPublisherDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", Matchers.is(expectedCreatedPublisherDTO.getId().intValue())))
             .andExpect(jsonPath("$.name", Matchers.is(expectedCreatedPublisherDTO.getName())))
             .andExpect(jsonPath("$.code", Matchers.is(expectedCreatedPublisherDTO.getCode())));
+  }
+
+  @Test
+  void when_Get_List_Is_Called_Then_Status_Ok_It_Should_Be_Returned() throws Exception {
+    //@Given
+    var expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
+
+    //@When
+    when(service.findAll()).thenReturn(Collections.singletonList(expectedCreatedPublisherDTO));
+
+    //@Then
+    mockMvc.perform(get(PUBLISHERS_API_URL_PATH)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].id", Matchers.is(expectedCreatedPublisherDTO.getId().intValue())))
+            .andExpect(jsonPath("$[0].name", Matchers.is(expectedCreatedPublisherDTO.getName())))
+            .andExpect(jsonPath("$[0].code", Matchers.is(expectedCreatedPublisherDTO.getCode())));
   }
 }

@@ -13,11 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -100,4 +100,32 @@ public class PublisherServiceTest {
     //@Then
     assertThrows(PublisherNotFoundException.class, () -> service.findById(expectedPublisherFoundId));
   }
+
+  @Test
+  void when_List_Publishers_Is_Called_Then_It_Should_Be_Returned() {
+    //@Given
+    var expectedPublisherFoundDTO = publisherDTOBuilder.buildPublisherDTO();
+    var expectedPublisherFound = mapper.toModel(expectedPublisherFoundDTO);
+
+    //@When
+    when(repository.findAll()).thenReturn(Collections.singletonList(expectedPublisherFound));
+    var foundPublishersDTO = service.findAll();
+
+    //@Then
+    assertThat(foundPublishersDTO.size(), is(1));
+    assertThat(foundPublishersDTO.get(0), is(equalTo(expectedPublisherFoundDTO)));
+
+  }
+
+  @Test
+  void when_List_Publishers_Is_Called_Then_An_Empty_List_It_Should_Be_Returned() {
+    //@Given is empty, because the simulating an empty list
+
+    //@When
+    when(repository.findAll()).thenReturn(Collections.emptyList());
+    var foundPublishersDTO = service.findAll();
+
+    //@Then
+    assertThat(foundPublishersDTO.size(), is(0));
+}
 }

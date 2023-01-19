@@ -12,6 +12,6 @@ public interface AuthorService {
 
     List<AuthorDTO> findAll();
 
-    public void delete(Long id);
+    void delete(Long id);
 
 }
