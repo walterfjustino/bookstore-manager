@@ -33,9 +33,11 @@ public class AuthorController implements AuthorControllerDocs{
     public List<AuthorDTO> findAll(){
         return service.findAll();
     }
-//    @PostMapping
-//    public ResponseEntity<AuthorDTO> create(@Valid @RequestBody AuthorDTO authorDTO){
-//        var createAuthor = service.create(authorDTO);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(createAuthor);
-//    }
+
+    @DeleteMapping("/{id}")
+    @Override
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
+
 }

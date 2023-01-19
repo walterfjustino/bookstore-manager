@@ -13,13 +13,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import java.util.Collection;
 import java.util.Collections;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -114,5 +113,20 @@ public class PublisherControllerTest {
             .andExpect(jsonPath("$[0].id", Matchers.is(expectedCreatedPublisherDTO.getId().intValue())))
             .andExpect(jsonPath("$[0].name", Matchers.is(expectedCreatedPublisherDTO.getName())))
             .andExpect(jsonPath("$[0].code", Matchers.is(expectedCreatedPublisherDTO.getCode())));
+  }
+
+  @Test
+  void when_Delete_Is_Called_Then_Status_NoContent_It_Should_Be_Returned() throws Exception {
+    //@Given
+    var expectedPublisherToDelete = publisherDTOBuilder.buildPublisherDTO();
+    var expectedPublisherIdToDelete = expectedPublisherToDelete.getId();
+
+    //@When
+    doNothing().when(service).delete(expectedPublisherIdToDelete);
+
+    //@Then
+    mockMvc.perform(delete(PUBLISHERS_API_URL_PATH + "/" + expectedPublisherIdToDelete)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
   }
 }

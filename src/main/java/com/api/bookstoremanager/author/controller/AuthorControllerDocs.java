@@ -31,5 +31,9 @@ public interface AuthorControllerDocs {
             @ApiResponse(code = 200, message = "Return all registered authors")
     })
     List<AuthorDTO> findAll();
-
+@ApiOperation("Author delete operation")
+@ApiResponses(value = {
+        @ApiResponse(code = 204, message = "Deleted author by id")
+})
+    void delete(Long id);
 }

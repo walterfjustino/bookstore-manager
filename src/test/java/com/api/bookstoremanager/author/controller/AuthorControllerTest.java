@@ -47,7 +47,7 @@ public class AuthorControllerTest {
     }
 
     @Test
-    @DisplayName("criar um novo usuario, se não houver nenhum cadastrado com o mesmo nome")
+    @DisplayName("criar um novo author, se não houver nenhum cadastrado com o mesmo nome")
     void when_POST_Is_Called_Then_Status_Created_It_Should_Be_Returned() throws Exception {
         var expectedAuthorCreatedDTO= authorDTOBuilder.buildAuthorDTO();
 
@@ -62,7 +62,7 @@ public class AuthorControllerTest {
     }
 
     @Test
-    @DisplayName("Lança a exceção quando encontrado que o usuario a ser incluido já existe")
+    @DisplayName("Lança a exceção quando encontrado que o author a ser incluido já existe")
     void when_POST_Is_Called_Without_Required_Fields_Then_Bad_Request_Status_It_Should_Be_Informed() throws Exception {
         var expectedAuthorCreatedDTO= authorDTOBuilder.buildAuthorDTO();
         expectedAuthorCreatedDTO.setName(null);
@@ -101,6 +101,5 @@ public class AuthorControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age", Is.is(expectedFoundAuthorDTO.getAge())));
 
     }
-
 }
 

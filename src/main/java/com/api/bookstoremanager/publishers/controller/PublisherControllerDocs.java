@@ -32,4 +32,10 @@ public interface PublisherControllerDocs {
           @ApiResponse(code = 200, message = "Return all registered publishers")
   })
   List<PublisherDTO> findAll();
+
+  @ApiOperation("Publisher delete operation")
+  @ApiResponses(value = {
+          @ApiResponse(code = 204, message = "Deleted publisher by id")
+  })
+  void delete(Long id);
 }
