@@ -52,7 +52,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     private void verifyIfExists(String authorName) {
         repository.findByName(authorName)
-                .ifPresent(author -> {throw new AuthorAlreadyExistsException(authorName);});
+                .ifPresent(author -> {throw new AuthorAlreadyExistsException(author.getName());});
     }
     private Author verifyAndgetAuthor(Long id) {
         return repository.findById(id)

@@ -18,9 +18,9 @@ public class UserDTOBuilder {
   @Builder.Default
   private Gender gender = Gender.MALE;
   @Builder.Default
-  private String email = "macgaren_vilao@gmail.com";
+  private String email = "macgaren_villain@gmail.com";
   @Builder.Default
-  private String username = "macgarenvilao";
+  private String username = "macgarenvillain";
   @Builder.Default
   private String password = "123456";
   @Builder.Default

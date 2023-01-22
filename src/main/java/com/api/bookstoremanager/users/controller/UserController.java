@@ -1,10 +1,14 @@
 package com.api.bookstoremanager.users.controller;
 
+import com.api.bookstoremanager.users.dto.MessageDTO;
+import com.api.bookstoremanager.users.dto.UserDTO;
 import com.api.bookstoremanager.users.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -13,4 +17,21 @@ public class UserController implements UserControllerDocs {
 
   @Autowired
   private UserServiceImpl service;
+
+@PostMapping
+@ResponseStatus(HttpStatus.CREATED)
+@Override
+  public MessageDTO create(@RequestBody @Valid UserDTO userToCreateDTO) {
+    return service.create(userToCreateDTO);
+  }
+
+  @Override
+  public MessageDTO update(Long id, UserDTO userToUpdateDTO) {
+    return null;
+  }
+
+  @Override
+  public void delete(Long id) {
+
+  }
 }
