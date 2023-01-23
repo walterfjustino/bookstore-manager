@@ -17,7 +17,7 @@ public class SwaggerConfig {
 
     public static final String BASE_PACKAGE = "com.api.bookstoremanager";
     public static final String API_TITLE = "Bookstore Manager";
-    public static final String API_DESCRIPTION = "Api of the delivery pizzas";
+    public static final String API_DESCRIPTION = "REST API for complete bookstore manager";
     public static final String API_VERSION = "1.0.0";
     public static final String CONTACT_NAME = "Walter Fernandes Justino";
     public static final String CONTACT_GITHUB = "https://github.com/walterfjustino";

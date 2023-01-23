@@ -29,16 +29,13 @@ public class Book extends Auditable {
     @Column(nullable = false)
     private String isbn;
 
-    @ManyToOne
-    @JoinColumn(name = "publisher_id")
-    private String publisher;
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Publisher publisher;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private Author author;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private User user;
 
     @Column(columnDefinition = "integer default 0")
