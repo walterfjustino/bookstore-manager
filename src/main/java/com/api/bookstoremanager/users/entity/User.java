@@ -3,6 +3,7 @@ package com.api.bookstoremanager.users.entity;
 import com.api.bookstoremanager.books.entity.Book;
 import com.api.bookstoremanager.entity.Auditable;
 import com.api.bookstoremanager.users.enums.Gender;
+import com.api.bookstoremanager.users.enums.Role;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -43,5 +44,9 @@ public class User extends Auditable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private List<Book> books;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Role role;
 
 }
