@@ -2,6 +2,7 @@ package com.api.bookstoremanager.users.service;
 
 import com.api.bookstoremanager.users.builder.UserDTOBuilder;
 import com.api.bookstoremanager.users.exception.UserAlreadyExistsException;
+import com.api.bookstoremanager.users.exception.UserNotFoundException;
 import com.api.bookstoremanager.users.mapper.UserMapper;
 import com.api.bookstoremanager.users.repository.UserRepository;
 import org.hamcrest.MatcherAssert;
@@ -64,5 +65,30 @@ public class UsersServiceTest {
             .thenReturn(Optional.of(expectedDuplicatedUser));
     //@Then
     assertThrows(UserAlreadyExistsException.class, () -> service.create(expectedDuplicatedUserDTO));
+  }
+
+  @Test
+  void when_Valid_User_Is_Informed_Then_It_Should_Be_Deleted() {
+    //@Given
+    var expectedDeletedUserDTO = userDTOBuilder.buildUserDTO();
+    var expectedDeletedUser = mapper.toModel(expectedDeletedUserDTO);
+    var expectedDeletedUserId = expectedDeletedUserDTO.getId();
+    //@When
+    Mockito.when(repository.findById(expectedDeletedUserId)).thenReturn(Optional.of(expectedDeletedUser));
+    Mockito.doNothing().when(repository).deleteById(expectedDeletedUserId);
+    service.delete(expectedDeletedUserId);
+    //@Then
+    Mockito.verify(repository, Mockito.times(1)).deleteById(expectedDeletedUserId);
+  }
+
+  @Test
+  void when_InValid_User_ID_Is_Informed_Then_It_Should_Be_Thrown() {
+    //@Given
+    var expectedDeletedUserDTO = userDTOBuilder.buildUserDTO();
+    var expectedDeletedUserId = expectedDeletedUserDTO.getId();
+    //@When
+    Mockito.when(repository.findById(expectedDeletedUserId)).thenReturn(Optional.empty());
+    //@Then
+    Assertions.assertThrows(UserNotFoundException.class, ()->  service.delete(expectedDeletedUserId));
   }
 }

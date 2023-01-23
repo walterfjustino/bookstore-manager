@@ -30,8 +30,10 @@ public class UserController implements UserControllerDocs {
     return null;
   }
 
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @Override
-  public void delete(Long id) {
-
+  public void delete(@PathVariable Long id) {
+  service.delete(id);
   }
 }

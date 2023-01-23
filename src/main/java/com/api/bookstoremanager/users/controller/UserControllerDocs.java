@@ -27,7 +27,8 @@ public interface UserControllerDocs {
 
   @ApiOperation("User delete operation")
   @ApiResponses(value = {
-          @ApiResponse(code = 204, message = "Deleted user by id")
+          @ApiResponse(code = 204, message = "Deleted user by id"),
+          @ApiResponse(code = 404, message = "User with ID not found in the system")
   })
   public void delete(Long id);
 }

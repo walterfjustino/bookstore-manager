@@ -72,4 +72,16 @@ public class UserControllerTest {
                     .content(JsonCoversionUtils.asJsonString(expectedUserToCreateDTO)))
             .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
+
+  @Test
+  void when_Delete_Is_Called_Then_No_Content_It_Should_Be_Informed() throws Exception {
+    //@Given
+    var expectedUserToCreateDTO = userDTOBuilder.buildUserDTO();
+    //@When
+    Mockito.doNothing().when(service).delete(expectedUserToCreateDTO.getId());
+    //@Then
+    mockMvc.perform(MockMvcRequestBuilders.delete(URL_PATH_USERS +"/"+expectedUserToCreateDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNoContent());
+  }
 }

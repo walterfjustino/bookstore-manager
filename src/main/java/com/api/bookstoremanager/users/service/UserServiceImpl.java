@@ -4,6 +4,7 @@ import com.api.bookstoremanager.users.dto.MessageDTO;
 import com.api.bookstoremanager.users.dto.UserDTO;
 import com.api.bookstoremanager.users.entity.User;
 import com.api.bookstoremanager.users.exception.UserAlreadyExistsException;
+import com.api.bookstoremanager.users.exception.UserNotFoundException;
 import com.api.bookstoremanager.users.mapper.UserMapper;
 import com.api.bookstoremanager.users.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,12 @@ public class UserServiceImpl implements UserService{
 
   @Override
   public void delete(Long id) {
+    verifyIfExists(id);
+    repository.deleteById(id);
+  }
 
+  private void verifyIfExists(Long id) {
+    repository.findById(id)
+            .orElseThrow(()-> {throw new UserNotFoundException(id);});
   }
 }
