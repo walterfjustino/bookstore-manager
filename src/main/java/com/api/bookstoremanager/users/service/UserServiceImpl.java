@@ -9,6 +9,7 @@ import com.api.bookstoremanager.users.mapper.UserMapper;
 import com.api.bookstoremanager.users.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.api.bookstoremanager.users.utils.MessageDTOUtils.creationMessage;
@@ -23,10 +24,14 @@ public class UserServiceImpl implements UserService{
   @Autowired
   private UserRepository repository;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
   @Override
   public MessageDTO create(UserDTO userToCreateDTO) {
     verifyIfExists(userToCreateDTO.getEmail(), userToCreateDTO.getUsername());
     var userToCreate = mapper.toModel(userToCreateDTO);
+    userToCreate.setPassword(passwordEncoder.encode(userToCreate.getPassword()));
     var createdUser = repository.save(userToCreate);
     return creationMessage(createdUser);
   }
@@ -36,6 +41,7 @@ public class UserServiceImpl implements UserService{
     var foundUser = verifyAndGetIfExists(id);
     userToUpdateDTO.setId(foundUser.getId());
     var userToUpdate = mapper.toModel(userToUpdateDTO);
+    userToUpdate.setPassword(passwordEncoder.encode(userToUpdate.getPassword()));
     userToUpdate.setCreatedDate(foundUser.getCreatedDate());
     var updatedUser = repository.save(userToUpdate);
     return updatedMessage(updatedUser);
