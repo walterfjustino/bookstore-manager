@@ -11,7 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import static com.api.bookstoremanager.users.utils.MessageDTOUtils.creationMessage;
+import static com.api.bookstoremanager.users.utils.MessageDTOUtils.updatedMessage;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -30,33 +31,29 @@ public class UserServiceImpl implements UserService{
     return creationMessage(createdUser);
   }
 
+  @Override
+  public MessageDTO update(Long id, UserDTO userToUpdateDTO) {
+    var foundUser = verifyAndGetIfExists(id);
+    userToUpdateDTO.setId(foundUser.getId());
+    var userToUpdate = mapper.toModel(userToUpdateDTO);
+    userToUpdate.setCreatedDate(foundUser.getCreatedDate());
+    var updatedUser = repository.save(userToUpdate);
+    return updatedMessage(updatedUser);
+  }
+
+  @Override
+  public void delete(Long id) {
+    verifyAndGetIfExists(id);
+    repository.deleteById(id);
+  }
+
   private void verifyIfExists(String email, String username) {
     repository.findByEmailOrUsername(email, username)
             .ifPresent(user -> {throw new UserAlreadyExistsException(user.getEmail(), user.getUsername());});
   }
 
-  private MessageDTO creationMessage(User createdUser) {
-    var createdUsername = createdUser.getUsername();
-    var createdUserId = createdUser.getId();
-    var createdUserMessage = String.format("User %s with ID %s successfully created", createdUsername, createdUserId);
-    return MessageDTO.builder()
-            .message(createdUserMessage)
-            .build();
-  }
-
-  @Override
-  public MessageDTO update(Long id, UserDTO userToUpdateDTO) {
-    return null;
-  }
-
-  @Override
-  public void delete(Long id) {
-    verifyIfExists(id);
-    repository.deleteById(id);
-  }
-
-  private void verifyIfExists(Long id) {
-    repository.findById(id)
+  private User verifyAndGetIfExists(Long id) {
+    return repository.findById(id)
             .orElseThrow(()-> {throw new UserNotFoundException(id);});
   }
 }

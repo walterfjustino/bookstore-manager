@@ -25,9 +25,10 @@ public class UserController implements UserControllerDocs {
     return service.create(userToCreateDTO);
   }
 
+  @PutMapping("/{id}")
   @Override
-  public MessageDTO update(Long id, UserDTO userToUpdateDTO) {
-    return null;
+  public MessageDTO update(@PathVariable Long id, @RequestBody @Valid UserDTO userToUpdateDTO) {
+    return service.update(id, userToUpdateDTO);
   }
 
   @DeleteMapping("/{id}")
