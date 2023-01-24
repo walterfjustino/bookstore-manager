@@ -18,3 +18,6 @@ logging:
     br:
       com:
         bookstore manager: INFO
+jwt:
+  secret: bookstoremanager
+  validity: 18000
