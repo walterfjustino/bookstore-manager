@@ -4,7 +4,7 @@ import com.api.bookstoremanager.books.entity.Book;
 import com.api.bookstoremanager.entity.Auditable;
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 

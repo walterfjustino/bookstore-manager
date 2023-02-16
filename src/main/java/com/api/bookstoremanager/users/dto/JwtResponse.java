@@ -1,11 +1,12 @@
 package com.api.bookstoremanager.users.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 @Builder
 public class JwtResponse {
 
-  private final String token;
+  private final String jwtToken;
 }

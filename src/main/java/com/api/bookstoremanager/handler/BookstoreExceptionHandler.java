@@ -2,6 +2,7 @@ package com.api.bookstoremanager.handler;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +36,7 @@ public class BookstoreExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<String> errors = new ArrayList<>();
         exception.getBindingResult()
                 .getFieldErrors()
@@ -47,11 +48,31 @@ public class BookstoreExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, "Informed argument(s) validation error(s)", errors);
     }
 
+//    @Override
+//    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+//        List<String> errors = new ArrayList<>();
+//        exception.getBindingResult()
+//                .getFieldErrors()
+//                .forEach(fieldError -> errors.add("Field " + fieldError.getField().toUpperCase() + " " + fieldError.getDefaultMessage()));
+//        exception.getBindingResult()
+//                .getGlobalErrors()
+//                .forEach(globalError -> errors.add("Object " + globalError.getObjectName() + " " + globalError.getDefaultMessage()));
+//
+//        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Informed argument(s) validation error(s)", errors);
+//    }
+
+
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, "Malformed JSON body and/or field error",
                 Collections.singletonList(exception.getLocalizedMessage()));
     }
+
+//    @Override
+//    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+//        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Malformed JSON body and/or field error",
+//                Collections.singletonList(exception.getLocalizedMessage()));
+//    }
 
     private ResponseEntity<Object> buildResponseEntity(HttpStatus httpStatus, String message, List<String> errors){
         ApiError apiError = ApiError.builder()

@@ -1,5 +1,7 @@
 package com.api.bookstoremanager.users.controller;
 
+import com.api.bookstoremanager.users.dto.JwtRequest;
+import com.api.bookstoremanager.users.dto.JwtResponse;
 import com.api.bookstoremanager.users.dto.MessageDTO;
 import com.api.bookstoremanager.users.dto.UserDTO;
 import io.swagger.annotations.Api;
@@ -31,4 +33,11 @@ public interface UserControllerDocs {
           @ApiResponse(code = 404, message = "User with ID not found in the system")
   })
   public void delete(Long id);
+
+  @ApiOperation("User authentication operation")
+  @ApiResponses(value = {
+          @ApiResponse(code = 200, message = "Success user authenticated"),
+          @ApiResponse(code = 404, message = "User not found")
+  })
+  public JwtResponse createAuthenticationToken(JwtRequest jwtRequest);
 }

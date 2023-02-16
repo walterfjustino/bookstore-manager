@@ -4,15 +4,15 @@ import com.api.bookstoremanager.books.entity.Book;
 import com.api.bookstoremanager.entity.Auditable;
 import com.api.bookstoremanager.users.enums.Gender;
 import com.api.bookstoremanager.users.enums.Role;
+import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends Auditable {
 
     @Id

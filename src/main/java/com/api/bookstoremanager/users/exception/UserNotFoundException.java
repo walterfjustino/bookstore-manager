@@ -1,7 +1,7 @@
 package com.api.bookstoremanager.users.exception;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 
 public class UserNotFoundException extends EntityNotFoundException {
   public UserNotFoundException(Long id) {

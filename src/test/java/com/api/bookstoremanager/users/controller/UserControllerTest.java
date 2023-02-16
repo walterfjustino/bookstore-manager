@@ -1,7 +1,11 @@
 package com.api.bookstoremanager.users.controller;
 
+import com.api.bookstoremanager.users.builder.JwtRequestBuilder;
 import com.api.bookstoremanager.users.builder.UserDTOBuilder;
+import com.api.bookstoremanager.users.dto.JwtRequest;
+import com.api.bookstoremanager.users.dto.JwtResponse;
 import com.api.bookstoremanager.users.dto.MessageDTO;
+import com.api.bookstoremanager.users.service.AuthenticationService;
 import com.api.bookstoremanager.users.service.UserServiceImpl;
 import com.api.bookstoremanager.utils.JsonCoversionUtils;
 import org.hamcrest.Matchers;
@@ -30,14 +34,20 @@ public class UserControllerTest {
   @Mock
   private UserServiceImpl service;
 
+  @Mock
+  private AuthenticationService authenticationService;
+
   @InjectMocks
   private UserController controller;
 
   private UserDTOBuilder userDTOBuilder;
 
+  private JwtRequestBuilder jwtRequestBuilder;
+
   @BeforeEach
   void setUp() {
     userDTOBuilder = UserDTOBuilder.builder().build();
+    jwtRequestBuilder = JwtRequestBuilder.builder().build();
     mockMvc = MockMvcBuilders.standaloneSetup(controller)
             .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
             .setViewResolvers((s, locale) -> new MappingJackson2JsonView())
@@ -100,5 +110,33 @@ public class UserControllerTest {
                     .content(JsonCoversionUtils.asJsonString(expectedUserToUpdateDTO)))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(expectedUpdatedMessage)));
+  }
+
+  @Test
+  void when_Post_Is_Called_To_Authenticate_User_Then_OK_Should_Be_Returned() throws Exception {
+    //@Given
+    JwtRequest jwtRequest = jwtRequestBuilder.buildJwtRequest();
+    JwtResponse expectedJwtToken = JwtResponse.builder().jwtToken("fakeToken").build();
+    //@When
+    Mockito.when(authenticationService.createAuthenticationToken(jwtRequest)).thenReturn(expectedJwtToken);
+    //@Then
+    mockMvc.perform(MockMvcRequestBuilders.post(URL_PATH_USERS + "/authenticate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(JsonCoversionUtils.asJsonString(jwtRequest)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.jwtToken", Matchers.is(expectedJwtToken.getJwtToken())));;
+  }
+
+  @Test
+  void when_Post_Is_Called_To_Authenticate_User_Without_Password_Then_Bad_Request_Should_Be_Returned() throws Exception {
+    //@Given
+    JwtRequest jwtRequest = jwtRequestBuilder.buildJwtRequest();
+    jwtRequest.setPassword(null);
+    //@When is not implemented, because throw an exception and don't enter the service layer.
+    //@Then
+    mockMvc.perform(MockMvcRequestBuilders.post(URL_PATH_USERS + "/authenticate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(JsonCoversionUtils.asJsonString(jwtRequest)))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }

@@ -1,8 +1,8 @@
 package com.api.bookstoremanager.author.exception;
 
-import javax.persistence.EntityExistsException;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.persistence.EntityExistsException;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class AuthorAlreadyExistsException extends EntityExistsException {
     public AuthorAlreadyExistsException(@NotBlank @Size(max = 200) String name) {

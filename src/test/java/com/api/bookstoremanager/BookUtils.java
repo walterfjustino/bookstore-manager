@@ -2,6 +2,7 @@ package com.api.bookstoremanager;
 
 import com.api.bookstoremanager.books.dto.BookDTO;
 import com.api.bookstoremanager.books.entity.Book;
+import com.api.bookstoremanager.publishers.dto.PublisherDTO;
 import com.api.bookstoremanager.publishers.entity.Publisher;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +23,7 @@ public class BookUtils {
                 .pages(faker.number().numberBetween(0, 200))
                 .chapters(faker.number().numberBetween(1, 20))
                 .isbn("0-596-52068-9")
-                .publisherName(faker.book().publisher())
+                .publisherName(new PublisherDTO())
                 .author(createFakeAuthorDTO())
                 .build();
     }
@@ -34,7 +35,7 @@ public class BookUtils {
                 .pages(faker.number().numberBetween(0, 200))
                 .chapters(faker.number().numberBetween(1, 20))
                 .isbn("0-596-52068-9")
-                .publisher(faker.book().publisher())
+                .publisher(new Publisher())
                 .author(createFakeAuthor())
                 .build();
     }
@@ -46,7 +47,7 @@ public class BookUtils {
                 .pages(bookDTO.getPages())
                 .chapters(bookDTO.getChapters())
                 .isbn(bookDTO.getIsbn())
-                .publisher(bookDTO.getPublisherName())
+                .publisher(new Publisher())
                 .author(createFakeAuthorFrom(bookDTO.getAuthor()))
                 .build();
     }

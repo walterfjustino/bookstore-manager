@@ -3,32 +3,25 @@ package com.api.bookstoremanager.users.service;
 import com.google.common.base.Function;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AllArgsConstructor;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-//@AllArgsConstructor
+@Service
 public class JwtTokenManager {
 
-
-//  @Value("${jwt.validity}")
+  @Value("${jwt.validity}")
   public Long jwtTokenValidty;
 
-//  @Value("${jwt.secret}")
+  @Value("${jwt.secret}")
   private String secret;
-
-  public JwtTokenManager(@Value("${jwt.validity}") Long jwtTokenValidty,
-                         @Value("${jwt.secret}") String secret) {
-    this.jwtTokenValidty = jwtTokenValidty;
-    this.secret = secret;
-  }
 
   public String generateToken(UserDetails userDetails){
     Map<String, Object> claims = new HashMap<>();
@@ -38,17 +31,21 @@ public class JwtTokenManager {
 
   private String doGenerateToken(String username, Map<String, Object> claims) {
     return Jwts.builder()
-            .setClaims(claims).setSubject(username)
+            .setClaims(claims)
+            .setSubject(username)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + jwtTokenValidty * 1000))
-            .signWith(SignatureAlgorithm.HS512, secret).compact();
+            .signWith(getSignInKey())
+            .compact();
   }
 
   public String getUsernameFromToken(String token){
+
     return getClaimForToken(token, Claims::getSubject);
   }
 
   public Date getExpirationDateFromToken(String token){
+
     return getClaimForToken(token, Claims::getExpiration);
   }
 
@@ -58,11 +55,10 @@ public class JwtTokenManager {
   }
 
   private Claims getAllClaimsForToken(String token) {
-    Claims claims = Jwts.parser()
-            .setSigningKey(secret)
-            .parseClaimsJws(token)
-            .getBody();
-    return claims;
+    return Jwts.parser()
+             .setSigningKey(getSignInKey())
+             .parseClaimsJws(token)
+             .getBody();
   }
 
   public boolean validateToken (String token, UserDetails userDetails){
@@ -74,6 +70,11 @@ public class JwtTokenManager {
   private boolean isTokenExpired(String token) {
     var expirationDate = getExpirationDateFromToken(token);
     return expirationDate.before(new Date());
+  }
+
+  private Key getSignInKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(secret);
+    return Keys.hmacShaKeyFor(keyBytes);
   }
 
 }
