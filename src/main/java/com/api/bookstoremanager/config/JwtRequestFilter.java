@@ -31,7 +31,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
   private JwtTokenManager jwtTokenManager;
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+  protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain filterChain) throws ServletException, IOException {
     var username = "";
     var jwtToken = "";
 
@@ -46,7 +48,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     if (isUsernameInContext(username)) {
       addUsernameInContext(request, username, jwtToken);
     }
-    chain.doFilter(request, response);
+    filterChain.doFilter(request, response);
   }
 
   private boolean isTokenPresent(String requestTokenHeader) {

@@ -43,7 +43,6 @@ public class UserController implements UserControllerDocs {
     service.delete(id);
   }
 
-  //  @CrossOrigin
   @PostMapping("/authenticate")
   public JwtResponse createAuthenticationToken(@RequestBody @Valid JwtRequest jwtRequest) {
     return authenticationService.createAuthenticationToken(jwtRequest);

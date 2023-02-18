@@ -27,16 +27,16 @@ public class BookRequestDTO {
     private String isbn;
 
     @NotNull
-    private Long publisherId;
-
-    @NotNull
-    private Long authorId;
-
-    @NotNull
     @Max(3000)
     private Integer pages;
 
     @NotNull
     @Max(100)
     private Integer chapters;
+
+    @NotNull
+    private Long publisherId;
+
+    @NotNull
+    private Long authorId;
 }

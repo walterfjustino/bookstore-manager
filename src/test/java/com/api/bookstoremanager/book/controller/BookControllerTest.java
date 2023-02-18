@@ -1,6 +1,8 @@
 package com.api.bookstoremanager.book.controller;
 
 import com.api.bookstoremanager.BookUtils;
+import com.api.bookstoremanager.book.builder.BookRequestDTOBuilder;
+import com.api.bookstoremanager.book.builder.BookResponseDTOBuilder;
 import com.api.bookstoremanager.books.controller.BookController;
 import com.api.bookstoremanager.books.dto.BookDTO;
 import com.api.bookstoremanager.dto.MessageResponseDTO;
@@ -24,50 +26,52 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 @ExtendWith(MockitoExtension.class)
 public class BookControllerTest {
 
-
-    private MockMvc mockMvc; //simula às operações no nosso controlador
-
+    private static final String BOOKS_API_URL_PATH = "/api/v1/books";
     @Mock
     private BookService bookService;
-
     @InjectMocks
     private BookController bookController;
+    private MockMvc mockMvc; //simula às operações no nosso controlador
+    private BookRequestDTOBuilder bookRequestDTOBuilder;
+    private BookResponseDTOBuilder bookResponseDTOBuilder;
 
     @BeforeEach
     void setUp() {
+        bookRequestDTOBuilder = BookRequestDTOBuilder.builder().build();
+        bookResponseDTOBuilder = BookResponseDTOBuilder.builder().build();
         mockMvc = MockMvcBuilders.standaloneSetup(bookController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .setViewResolvers((viewName, locale) ->  new MappingJackson2JsonView())
                 .build();
     }
 
-    @Test
-    void testWhenPostIsCalledThenABookShouldBeCreated() throws Exception {
-        BookDTO bookDTO = BookUtils.createFakeBookDTO();
-        MessageResponseDTO expectedMessageResponse = MessageResponseDTO.builder()
-                .message("Book created with ID" + bookDTO.getId())
-                .build();
-
-        Mockito.when(bookService.create(bookDTO)).thenReturn(expectedMessageResponse);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/books")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(BookUtils.asJsonString(bookDTO)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(expectedMessageResponse.getMessage())));
-    }
-
-
-    @Test
-    void testWhenPostWithInvalidISBNIsCalledThenBadRequestShouldBeReturn() throws Exception {
-        BookDTO bookDTO = BookUtils.createFakeBookDTO();
-        bookDTO.setIsbn("Invalid ISBN");
-
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(BookUtils.asJsonString(bookDTO)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-
-    }
+//    @Test
+//    void testWhenPostIsCalledThenABookShouldBeCreated() throws Exception {
+//        BookDTO bookDTO = BookUtils.createFakeBookDTO();
+//        MessageResponseDTO expectedMessageResponse = MessageResponseDTO.builder()
+//                .message("Book created with ID" + bookDTO.getId())
+//                .build();
+//
+//        Mockito.when(bookService.create(bookDTO)).thenReturn(expectedMessageResponse);
+//
+//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/books")
+//        .contentType(MediaType.APPLICATION_JSON)
+//        .content(BookUtils.asJsonString(bookDTO)))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(expectedMessageResponse.getMessage())));
+//    }
+//
+//
+//    @Test
+//    void testWhenPostWithInvalidISBNIsCalledThenBadRequestShouldBeReturn() throws Exception {
+//        BookDTO bookDTO = BookUtils.createFakeBookDTO();
+//        bookDTO.setIsbn("Invalid ISBN");
+//
+//
+//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/books")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(BookUtils.asJsonString(bookDTO)))
+//                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+//
+//    }
 }

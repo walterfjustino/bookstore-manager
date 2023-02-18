@@ -17,11 +17,10 @@ public class BookResponseDTO {
 
     private String isbn;
 
-    private PublisherDTO publisher;
-
-    private AuthorDTO author;
-
     private Integer pages;
 
     private Integer chapters;
+
+    private AuthorDTO author;
+    private PublisherDTO publisher;
 }
