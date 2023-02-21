@@ -62,4 +62,9 @@ public class UserServiceImpl implements UserService{
     return repository.findById(id)
             .orElseThrow(()-> {throw new UserNotFoundException(id);});
   }
+
+  public User verifyAndGetUserIfExists(String username) {
+    return repository.findByUsername(username)
+            .orElseThrow(() -> new UserNotFoundException(username));
+  }
 }

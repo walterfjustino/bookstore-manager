@@ -1,15 +1,20 @@
 package com.api.bookstoremanager.books.service;
 
+import com.api.bookstoremanager.author.entity.Author;
 import com.api.bookstoremanager.author.service.AuthorServiceImpl;
 import com.api.bookstoremanager.books.dto.BookDTO;
 import com.api.bookstoremanager.books.dto.BookRequestDTO;
+import com.api.bookstoremanager.books.dto.BookResponseDTO;
 import com.api.bookstoremanager.books.entity.Book;
+import com.api.bookstoremanager.books.exception.BookAlreadyExistsException;
 import com.api.bookstoremanager.books.exception.BookNotFoundException;
 import com.api.bookstoremanager.books.mapper.BookMapper;
 import com.api.bookstoremanager.books.repository.BookRepository;
 import com.api.bookstoremanager.dto.MessageResponseDTO;
+import com.api.bookstoremanager.publishers.entity.Publisher;
 import com.api.bookstoremanager.publishers.service.PublisherServiceImpl;
 import com.api.bookstoremanager.users.dto.AuthenticatedUser;
+import com.api.bookstoremanager.users.entity.User;
 import com.api.bookstoremanager.users.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,20 +54,29 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public MessageResponseDTO create(AuthenticatedUser authenticatedUser, BookRequestDTO bookRequestDTO) {
-        Book bookToSave = mapper.toModel(bookDTO);
-
+    public BookResponseDTO create(AuthenticatedUser authenticatedUser, BookRequestDTO bookRequestDTO) {
+        var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
+        verifyIfBookIsAlreadyRegistered(bookRequestDTO, foundAuthenticatedUser);
+        var foundAuthor = authorService.verifyAndGetAuthorIfExists(bookRequestDTO.getAuthorId());
+        var foundPublisher = publisherService.verifyIfPublisherExistsAndGet(bookRequestDTO.getPublisherId());
+        Book bookToSave = mapper.toModel(bookRequestDTO);
+        bookToSave.setUser(foundAuthenticatedUser);
+        bookToSave.setAuthor(foundAuthor);
+        bookToSave.setPublisher(foundPublisher);
         Book savedBook = bookRepository.save(bookToSave);
-        return MessageResponseDTO.builder()
-                .message("Book created with ID " + savedBook.getId())
-                .build();
-        return null;
+        return mapper.toDTO(savedBook);
+    }
+
+    private void verifyIfBookIsAlreadyRegistered(BookRequestDTO bookRequestDTO, User foundUser) {
+        bookRepository.findByNameAndIsbnAndUser(bookRequestDTO.getName(), bookRequestDTO.getIsbn(), foundUser)
+                .ifPresent(duplicatedBook -> {
+                    throw new BookAlreadyExistsException(bookRequestDTO.getName(), bookRequestDTO.getIsbn(), foundUser.getUsername());});
     }
 
     @Override
     public BookDTO findById(Long id) throws BookNotFoundException {
         var book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-        return mapper.toDTO(book);
+        return null;
     }
 
 

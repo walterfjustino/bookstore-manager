@@ -5,8 +5,11 @@ import com.api.bookstoremanager.book.builder.BookRequestDTOBuilder;
 import com.api.bookstoremanager.book.builder.BookResponseDTOBuilder;
 import com.api.bookstoremanager.books.controller.BookController;
 import com.api.bookstoremanager.books.dto.BookDTO;
+import com.api.bookstoremanager.books.dto.BookRequestDTO;
+import com.api.bookstoremanager.books.dto.BookResponseDTO;
 import com.api.bookstoremanager.dto.MessageResponseDTO;
 import com.api.bookstoremanager.books.service.BookService;
+import com.api.bookstoremanager.users.dto.AuthenticatedUser;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +25,19 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
+import static com.api.bookstoremanager.utils.JsonCoversionUtils.asJsonString;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 public class BookControllerTest {
@@ -43,6 +59,34 @@ public class BookControllerTest {
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .setViewResolvers((viewName, locale) ->  new MappingJackson2JsonView())
                 .build();
+    }
+
+
+    @Test
+    void whenPOSTIsCalledThenCreatedStatusShouldBeReturned() throws Exception {
+        BookRequestDTO expectedBookToCreateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
+        BookResponseDTO expectedCreatedBookDTO = bookResponseDTOBuilder.buildBookResponse();
+
+        when(bookService.create(any(AuthenticatedUser.class), eq(expectedBookToCreateDTO))).thenReturn(expectedCreatedBookDTO);
+
+        mockMvc.perform(post(BOOKS_API_URL_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(expectedBookToCreateDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(expectedCreatedBookDTO.getId().intValue())))
+                .andExpect(jsonPath("$.name", is(expectedCreatedBookDTO.getName())))
+                .andExpect(jsonPath("$.isbn", is(expectedCreatedBookDTO.getIsbn())));
+    }
+
+    @Test
+    void whenPOSTIsCalledWithoutRequiredFieldsThenBadRequestShouldBeReturned() throws Exception {
+        BookRequestDTO expectedBookToCreateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
+        expectedBookToCreateDTO.setIsbn(null);
+
+        mockMvc.perform(post(BOOKS_API_URL_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(expectedBookToCreateDTO)))
+                .andExpect(status().isBadRequest());
     }
 
 //    @Test

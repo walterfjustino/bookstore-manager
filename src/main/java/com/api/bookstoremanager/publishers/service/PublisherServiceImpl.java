@@ -47,12 +47,12 @@ public PublisherDTO findById(Long id) {
 
   @Override
   public void delete(Long id) {
-    verifyIfExists(id);
+    verifyIfPublisherExistsAndGet(id);
     repository.deleteById(id);
   }
 
-  private void verifyIfExists(Long id) {
-    repository.findById(id)
+  public Publisher verifyIfPublisherExistsAndGet(Long id) {
+    return repository.findById(id)
             .orElseThrow(()-> new PublisherNotFoundException(id));
   }
 

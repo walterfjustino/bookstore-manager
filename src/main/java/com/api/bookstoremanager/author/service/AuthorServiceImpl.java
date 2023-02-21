@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -31,7 +30,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDTO findById(Long id) {
-        var foundAuthor = verifyAndgetAuthor(id);
+        var foundAuthor = verifyAndGetAuthorIfExists(id);
         return mapper.toDTO(foundAuthor);
     }
 
@@ -46,7 +45,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void delete(Long id) {
-        verifyAndgetAuthor(id);
+        verifyAndGetAuthorIfExists(id);
         repository.deleteById(id);
     }
 
@@ -54,7 +53,7 @@ public class AuthorServiceImpl implements AuthorService {
         repository.findByName(authorName)
                 .ifPresent(author -> {throw new AuthorAlreadyExistsException(author.getName());});
     }
-    private Author verifyAndgetAuthor(Long id) {
+    public Author verifyAndGetAuthorIfExists(Long id) {
         return repository.findById(id)
                 .orElseThrow(()-> new AuthorNotFoundException(id));
     }

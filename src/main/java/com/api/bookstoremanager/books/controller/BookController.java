@@ -10,6 +10,8 @@ import com.api.bookstoremanager.books.exception.BookNotFoundException;
 import com.api.bookstoremanager.books.service.BookService;
 import com.api.bookstoremanager.users.dto.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -22,25 +24,28 @@ public class BookController implements BookControllerDocs {
     @Autowired
     private BookService bookService;
 
+//    @PostMapping
+//    public MessageResponseDTO create(@RequestBody @Valid BookDTO bookDTO){
+//
+//        return null ;
+//    }
+
+//    @GetMapping("/{id}")
+//    public BookDTO findById(@PathVariable Long id) throws BookNotFoundException {
+//        return bookService. findById(id);
+//
+//    }
+//    @GetMapping("/")
+//    public List<Book> findAll(){
+//        return bookService.findAll();
+//    }
+
     @PostMapping
-    public MessageResponseDTO create(@RequestBody @Valid BookDTO bookDTO){
-
-        return bookService.create(bookDTO) ;
-    }
-
-    @GetMapping("/{id}")
-    public BookDTO findById(@PathVariable Long id) throws BookNotFoundException {
-        return bookService. findById(id);
-
-    }
-    @GetMapping("/")
-    public List<Book> findAll(){
-        return bookService.findAll();
-    }
-
+    @ResponseStatus(HttpStatus.CREATED)
     @Override
-    public BookResponseDTO create(AuthenticatedUser authenticatedUser, BookRequestDTO bookRequestDTO) {
-        return null;
+    public BookResponseDTO create(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                                  @RequestBody @Valid BookRequestDTO bookRequestDTO) {
+        return bookService.create(authenticatedUser,bookRequestDTO);
     }
 
     @Override
