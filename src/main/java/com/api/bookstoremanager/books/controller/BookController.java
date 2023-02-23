@@ -63,21 +63,26 @@ public class BookController implements BookControllerDocs {
 //        return bookService.findById();
 //    }
 
+
+  @GetMapping
   @Override
   public List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser) {
     return bookService.findAllByUser(authenticatedUser);
   }
 
-  @Override
+
+ @PutMapping("/{id}")
+ @Override
   public BookResponseDTO updateByUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-                                      @RequestBody @Valid Long bookId,
+                                      @RequestBody @Valid Long id,
                                       @RequestBody @Valid BookRequestDTO bookRequestDTO) {
     return null;
   }
 
+  @DeleteMapping("/{id}")
   @Override
   public void deleteByIdAndUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-                                @PathVariable Long bookId) {
+                                @PathVariable Long id) {
 
   }
 }

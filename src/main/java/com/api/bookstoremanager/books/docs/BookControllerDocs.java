@@ -37,12 +37,12 @@ public interface BookControllerDocs {
             @ApiResponse(code = 404, message = "Book not found error"),
             @ApiResponse(code = 400, message = "Missing required fields, wrong field range value or book already registered on system")
     })
-    BookResponseDTO updateByUser(AuthenticatedUser authenticatedUser, Long bookId, BookRequestDTO bookRequestDTO);
+    BookResponseDTO updateByUser(AuthenticatedUser authenticatedUser, Long id, BookRequestDTO bookRequestDTO);
 
     @ApiOperation(value = "Book delete operation")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Book by user successfully deleted"),
             @ApiResponse(code = 404, message = "Book not found error")
     })
-    void deleteByIdAndUser(AuthenticatedUser authenticatedUser, Long bookId);
+    void deleteByIdAndUser(AuthenticatedUser authenticatedUser, Long id);
 }
