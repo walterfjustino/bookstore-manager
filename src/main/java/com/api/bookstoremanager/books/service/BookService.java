@@ -12,5 +12,5 @@ public interface BookService {
 
     public BookResponseDTO findById(AuthenticatedUser authenticatedUser, Long id);
 
-    public List<BookResponseDTO> findAll();
+    public List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser);
 }

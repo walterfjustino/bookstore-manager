@@ -30,6 +30,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -146,6 +148,39 @@ public class BookServiceImplTest {
         //@Then
         assertThrows(BookNotFoundException.class, () -> bookService.findById(authenticatedUser, expectedFoundBook.getId()));
     }
+
+    @Test
+    void when_List_Book_Is_Called_Then_ItShould_Be_Returned() {
+        //@Given
+        BookRequestDTO expectedBookToFindDTO = bookRequestDTOBuilder.buildRequestBookDTO();
+        BookResponseDTO expectedFoundBookDTO = bookResponseDTOBuilder.buildBookResponse();
+        Book expectedFoundBook = mapper.toModel(expectedFoundBookDTO);
+
+        //@When
+        when(userService.verifyAndGetUserIfExists(authenticatedUser.getUsername())).thenReturn(new User());
+        when(bookRepository.findAllByUser(any(User.class))).thenReturn(Collections.singletonList(expectedFoundBook));
+
+        List<BookResponseDTO> returnedBookResponseList = bookService.findAllByUser(authenticatedUser);
+
+        //@Then
+        MatcherAssert.assertThat(returnedBookResponseList.size(), Matchers.is(1));
+        MatcherAssert.assertThat(returnedBookResponseList.get(0), Matchers.is(Matchers.equalTo(expectedFoundBookDTO)));
+    }
+
+    @Test
+    void when_List_Book_Is_Called_Then_An_Empty_List_ItShould_Be_Returned() {
+        //@Given
+
+        //@When
+        when(userService.verifyAndGetUserIfExists(authenticatedUser.getUsername())).thenReturn(new User());
+        when(bookRepository.findAllByUser(any(User.class))).thenReturn(Collections.emptyList());
+
+        List<BookResponseDTO> returnedBookResponseList = bookService.findAllByUser(authenticatedUser);
+
+        //@Then
+        MatcherAssert.assertThat(returnedBookResponseList.size(), Matchers.is(0));
+    }
+        //@Then
     //    @Test
 //    void whenGivenExistingIdThenReturnThisBook() throws BookNotFoundException {
 //        Book expectedFoundBook = BookUtils.createFakeBook();

@@ -89,8 +89,9 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public List<BookResponseDTO> findAll() {
-        return bookRepository.findAll()
+    public List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser) {
+        var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
+        return bookRepository.findAllByUser(foundAuthenticatedUser)
                 .stream()
                 .map(mapper::toDTO)
                 .toList();

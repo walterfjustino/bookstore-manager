@@ -65,7 +65,7 @@ public class BookController implements BookControllerDocs {
 
   @Override
   public List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser) {
-    return bookService.findAll();
+    return bookService.findAllByUser(authenticatedUser);
   }
 
   @Override
