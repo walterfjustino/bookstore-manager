@@ -67,21 +67,32 @@ public class BookServiceImpl implements BookService {
         return mapper.toDTO(savedBook);
     }
 
+    @Override
+    public BookResponseDTO findById(AuthenticatedUser authenticatedUser, Long id) throws BookNotFoundException {
+        var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
+        return bookRepository.findByIdAndUser(id, foundAuthenticatedUser)
+                .map(mapper::toDTO)
+                .orElseThrow(() -> new BookNotFoundException(id));
+    }
+
     private void verifyIfBookIsAlreadyRegistered(BookRequestDTO bookRequestDTO, User foundUser) {
         bookRepository.findByNameAndIsbnAndUser(bookRequestDTO.getName(), bookRequestDTO.getIsbn(), foundUser)
                 .ifPresent(duplicatedBook -> {
                     throw new BookAlreadyExistsException(bookRequestDTO.getName(), bookRequestDTO.getIsbn(), foundUser.getUsername());});
     }
 
-    @Override
-    public BookDTO findById(Long id) throws BookNotFoundException {
-        var book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-        return null;
-    }
+//    @Override
+//    public BookDTO findById(Long id) throws BookNotFoundException {
+//        var book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+//        return null;
+//    }
 
 
     @Override
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public List<BookResponseDTO> findAll() {
+        return bookRepository.findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 }

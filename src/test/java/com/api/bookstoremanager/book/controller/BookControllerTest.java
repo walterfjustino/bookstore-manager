@@ -89,6 +89,21 @@ public class BookControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void when_GET_With_Valid_ID_Is_Called_Then_Status_OK_It_Should_Be_Returned() throws Exception {
+        BookRequestDTO expectedBookToFindDTO = bookRequestDTOBuilder.buildRequestBookDTO();
+        BookResponseDTO expectedFoundBookDTO = bookResponseDTOBuilder.buildBookResponse();
+
+        when(bookService.findById(any(AuthenticatedUser.class), eq(expectedBookToFindDTO.getId()))).thenReturn(expectedFoundBookDTO);
+
+        mockMvc.perform(get(BOOKS_API_URL_PATH + "/" + expectedBookToFindDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(expectedFoundBookDTO.getId().intValue())))
+                .andExpect(jsonPath("$.name", is(expectedFoundBookDTO.getName())))
+                .andExpect(jsonPath("$.isbn", is(expectedFoundBookDTO.getIsbn())));
+    }
+
 //    @Test
 //    void testWhenPostIsCalledThenABookShouldBeCreated() throws Exception {
 //        BookDTO bookDTO = BookUtils.createFakeBookDTO();

@@ -9,20 +9,22 @@ import com.api.bookstoremanager.dto.MessageResponseDTO;
 import com.api.bookstoremanager.books.exception.BookNotFoundException;
 import com.api.bookstoremanager.books.service.BookService;
 import com.api.bookstoremanager.users.dto.AuthenticatedUser;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/books")
 public class BookController implements BookControllerDocs {
 
-    @Autowired
-    private BookService bookService;
+  @Autowired
+  private BookService bookService;
 
 //    @PostMapping
 //    public MessageResponseDTO create(@RequestBody @Valid BookDTO bookDTO){
@@ -40,31 +42,42 @@ public class BookController implements BookControllerDocs {
 //        return bookService.findAll();
 //    }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    @Override
-    public BookResponseDTO create(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-                                  @RequestBody @Valid BookRequestDTO bookRequestDTO) {
-        return bookService.create(authenticatedUser,bookRequestDTO);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  @Override
+  public BookResponseDTO create(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                                @RequestBody @Valid BookRequestDTO bookRequestDTO) {
+    return bookService.create(authenticatedUser, bookRequestDTO);
+  }
 
-    @Override
-    public BookResponseDTO findByIdAndUser(AuthenticatedUser authenticatedUser, Long id) {
-        return null;
-    }
+  @GetMapping("/{id}")
+  @Override
+  public BookResponseDTO findByIdAndUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                                         @PathVariable Long id) {
+    return bookService.findById(authenticatedUser, id);
+  }
 
-    @Override
-    public List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser) {
-        return null;
-    }
+//    @Override
+//    public BookResponseDTO findByIdAndUser(AuthenticatedUser authenticatedUser, Long id) {
+//
+//        return bookService.findById();
+//    }
 
-    @Override
-    public BookResponseDTO updateByUser(AuthenticatedUser authenticatedUser, Long bookId, BookRequestDTO bookRequestDTO) {
-        return null;
-    }
+  @Override
+  public List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser) {
+    return bookService.findAll();
+  }
 
-    @Override
-    public void deleteByIdAndUser(AuthenticatedUser authenticatedUser, Long bookId) {
+  @Override
+  public BookResponseDTO updateByUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                                      @RequestBody @Valid Long bookId,
+                                      @RequestBody @Valid BookRequestDTO bookRequestDTO) {
+    return null;
+  }
 
-    }
+  @Override
+  public void deleteByIdAndUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                                @PathVariable Long bookId) {
+
+  }
 }
