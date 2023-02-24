@@ -105,8 +105,17 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponseDTO updateByUser(AuthenticatedUser authenticatedUser, Long id, BookRequestDTO bookRequestDTO) {
         var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
-        Book foundBookToUpdate = verifyAndGetIfExists(id, foundAuthenticatedUser);
-        return null;
+        Book foundBook = verifyAndGetIfExists(id, foundAuthenticatedUser);
+        var foundAuthor = authorService.verifyAndGetAuthorIfExists(bookRequestDTO.getAuthorId());
+        var foundPublisher = publisherService.verifyIfPublisherExistsAndGet(bookRequestDTO.getPublisherId());
+        Book bookToUpdate = mapper.toModel(bookRequestDTO);
+        bookToUpdate.setId(foundBook.getId());
+        bookToUpdate.setUser(foundAuthenticatedUser);
+        bookToUpdate.setAuthor(foundAuthor);
+        bookToUpdate.setPublisher(foundPublisher);
+        bookToUpdate.setCreatedDate(foundBook.getCreatedDate());
+        Book updatedBook = bookRepository.save(bookToUpdate);
+        return mapper.toDTO(updatedBook);
     }
 
     private void verifyIfBookIsAlreadyRegistered(BookRequestDTO bookRequestDTO, User foundUser) {

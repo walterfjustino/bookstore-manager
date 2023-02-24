@@ -85,6 +85,6 @@ public class BookController implements BookControllerDocs {
   public BookResponseDTO updateByUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
                                       @PathVariable Long id,
                                       @RequestBody @Valid BookRequestDTO bookRequestDTO) {
-    return null;
+    return bookService.updateByUser(authenticatedUser,id, bookRequestDTO);
   }
 }
