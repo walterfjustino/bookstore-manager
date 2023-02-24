@@ -19,6 +19,7 @@ import com.api.bookstoremanager.users.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -75,11 +76,7 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    private void verifyIfBookIsAlreadyRegistered(BookRequestDTO bookRequestDTO, User foundUser) {
-        bookRepository.findByNameAndIsbnAndUser(bookRequestDTO.getName(), bookRequestDTO.getIsbn(), foundUser)
-                .ifPresent(duplicatedBook -> {
-                    throw new BookAlreadyExistsException(bookRequestDTO.getName(), bookRequestDTO.getIsbn(), foundUser.getUsername());});
-    }
+
 
 //    @Override
 //    public BookDTO findById(Long id) throws BookNotFoundException {
@@ -95,5 +92,31 @@ public class BookServiceImpl implements BookService {
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
+    }
+    @Transactional
+    @Override
+    public void deleteByIdAndUser(AuthenticatedUser authenticatedUser, Long id) {
+        var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
+        Book foundBookToDelete = verifyAndGetIfExists(id, foundAuthenticatedUser);
+        bookRepository.deleteByIdAndUser(foundBookToDelete.getId(), foundAuthenticatedUser);
+
+    }
+
+    @Override
+    public BookResponseDTO updateByUser(AuthenticatedUser authenticatedUser, Long id, BookRequestDTO bookRequestDTO) {
+        var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
+        Book foundBookToUpdate = verifyAndGetIfExists(id, foundAuthenticatedUser);
+        return null;
+    }
+
+    private void verifyIfBookIsAlreadyRegistered(BookRequestDTO bookRequestDTO, User foundUser) {
+        bookRepository.findByNameAndIsbnAndUser(bookRequestDTO.getName(), bookRequestDTO.getIsbn(), foundUser)
+                .ifPresent(duplicatedBook -> {
+                    throw new BookAlreadyExistsException(bookRequestDTO.getName(), bookRequestDTO.getIsbn(), foundUser.getUsername());});
+    }
+
+    private Book verifyAndGetIfExists(Long id, User foundAuthenticatedUser) {
+        return bookRepository.findByIdAndUser(id, foundAuthenticatedUser)
+                .orElseThrow(()-> new BookNotFoundException(id));
     }
 }

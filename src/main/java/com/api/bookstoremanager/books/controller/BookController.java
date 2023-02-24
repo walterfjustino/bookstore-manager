@@ -71,18 +71,20 @@ public class BookController implements BookControllerDocs {
   }
 
 
- @PutMapping("/{id}")
- @Override
-  public BookResponseDTO updateByUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-                                      @RequestBody @Valid Long id,
-                                      @RequestBody @Valid BookRequestDTO bookRequestDTO) {
-    return null;
-  }
-
   @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @Override
   public void deleteByIdAndUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
                                 @PathVariable Long id) {
+    bookService.deleteByIdAndUser(authenticatedUser,id);
 
+  }
+
+  @PutMapping("/{id}")
+  @Override
+  public BookResponseDTO updateByUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                                      @PathVariable Long id,
+                                      @RequestBody @Valid BookRequestDTO bookRequestDTO) {
+    return null;
   }
 }

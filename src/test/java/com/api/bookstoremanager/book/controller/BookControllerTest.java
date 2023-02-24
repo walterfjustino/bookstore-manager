@@ -120,6 +120,18 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$[0].isbn", is(expectedFoundBookDTO.getIsbn())));
     }
 
+    @Test
+    void when_DELETE_Is_Called_With_Valid_ID_Is_Called_Then_Status_No_Content_It_Should_Be_Returned() throws Exception {
+        BookRequestDTO expectedBookToDeleteDTO = bookRequestDTOBuilder.buildRequestBookDTO();
+        BookResponseDTO expectedFoundBookDTO = bookResponseDTOBuilder.buildBookResponse();
+
+        doNothing().when(bookService).deleteByIdAndUser(any(AuthenticatedUser.class), eq(expectedBookToDeleteDTO.getId()));
+
+        mockMvc.perform(delete(BOOKS_API_URL_PATH + "/" + expectedBookToDeleteDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
 //    @Test
 //    void testWhenPostIsCalledThenABookShouldBeCreated() throws Exception {
 //        BookDTO bookDTO = BookUtils.createFakeBookDTO();

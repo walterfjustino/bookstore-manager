@@ -30,6 +30,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceImplTest {
@@ -168,7 +169,7 @@ public class BookServiceImplTest {
     }
 
     @Test
-    void when_List_Book_Is_Called_Then_An_Empty_List_ItShould_Be_Returned() {
+    void when_List_Book_Is_Called_Then_An_Empty_List_It_Should_Be_Returned() {
         //@Given
 
         //@When
@@ -179,6 +180,39 @@ public class BookServiceImplTest {
 
         //@Then
         MatcherAssert.assertThat(returnedBookResponseList.size(), Matchers.is(0));
+    }
+
+    @Test
+    void when_Existing_Book_Is_Informed_Then_It_Should_Be_Deleted() {
+        //@Given
+        BookResponseDTO expectedBookToDeleteDTO = bookResponseDTOBuilder.buildBookResponse();
+        Book expectedBookToDelete = mapper.toModel(expectedBookToDeleteDTO);
+
+        //@When
+        when(userService.verifyAndGetUserIfExists(authenticatedUser.getUsername())).thenReturn(new User());
+        when(bookRepository.findByIdAndUser(eq(expectedBookToDeleteDTO.getId()), any(User.class)))
+                .thenReturn(Optional.of(expectedBookToDelete));
+
+        doNothing().when(bookRepository).deleteByIdAndUser(eq(expectedBookToDeleteDTO.getId()), any(User.class));
+        bookService.deleteByIdAndUser(authenticatedUser, expectedBookToDeleteDTO.getId());
+
+        //@Then
+        verify(bookRepository, times(1)).deleteByIdAndUser(eq(expectedBookToDeleteDTO.getId()),any(User.class));
+    }
+
+    @Test
+    void when_Not_Existing_Book_Is_Informed_Then_An_Exception_It_Should_Be_Thrown() {
+        //@Given
+        BookResponseDTO expectedBookToDeleteDTO = bookResponseDTOBuilder.buildBookResponse();
+        Book expectedBookToDelete = mapper.toModel(expectedBookToDeleteDTO);
+
+        //@When
+        when(userService.verifyAndGetUserIfExists(authenticatedUser.getUsername())).thenReturn(new User());
+        when(bookRepository.findByIdAndUser(eq(expectedBookToDeleteDTO.getId()), any(User.class)))
+                .thenReturn(Optional.empty());
+
+        //@Then
+        assertThrows(BookNotFoundException.class, () -> bookService.deleteByIdAndUser(authenticatedUser, expectedBookToDelete.getId()));
     }
         //@Then
     //    @Test
