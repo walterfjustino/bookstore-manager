@@ -10,6 +10,7 @@ import com.api.bookstoremanager.users.service.UserServiceImpl;
 import com.api.bookstoremanager.utils.JsonCoversionUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,6 +56,7 @@ public class UserControllerTest {
   }
 
   @Test
+  @DisplayName("cria um novo User, se não houver nenhum cadastrado com o mesmo nome")
   void when_POST_Is_Called_Then_Created_Status_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedUserToCreateDTO = userDTOBuilder.buildUserDTO();
@@ -71,6 +73,7 @@ public class UserControllerTest {
   }
 
   @Test
+  @DisplayName("Lança a exceção quando encontrado que o User a ser incluido já existe")
   void when_POST_Is_Called_Without_Required_Field_Then_BadRequesT_Status_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedUserToCreateDTO = userDTOBuilder.buildUserDTO();
@@ -84,6 +87,7 @@ public class UserControllerTest {
   }
 
   @Test
+  @DisplayName("Excluí um User pelo id")
   void when_Delete_Is_Called_Then_No_Content_It_Should_Be_Informed() throws Exception {
     //@Given
     var expectedUserToCreateDTO = userDTOBuilder.buildUserDTO();
@@ -96,6 +100,7 @@ public class UserControllerTest {
   }
 
   @Test
+  @DisplayName("Atualiza um User")
   void when_PUT_Is_Called_Then_OK_Status_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedUserToUpdateDTO = userDTOBuilder.buildUserDTO();
@@ -113,6 +118,7 @@ public class UserControllerTest {
   }
 
   @Test
+  @DisplayName("Autêntica um usuario para gerar o token")
   void when_Post_Is_Called_To_Authenticate_User_Then_OK_Should_Be_Returned() throws Exception {
     //@Given
     JwtRequest jwtRequest = jwtRequestBuilder.buildJwtRequest();
@@ -128,6 +134,7 @@ public class UserControllerTest {
   }
 
   @Test
+  @DisplayName("Lança exceção se o User ou o password estiver errado ou não preenchido")
   void when_Post_Is_Called_To_Authenticate_User_Without_Password_Then_Bad_Request_Should_Be_Returned() throws Exception {
     //@Given
     JwtRequest jwtRequest = jwtRequestBuilder.buildJwtRequest();

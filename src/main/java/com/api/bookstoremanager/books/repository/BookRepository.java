@@ -1,7 +1,6 @@
 package com.api.bookstoremanager.books.repository;
 
 
-import com.api.bookstoremanager.books.dto.BookResponseDTO;
 import com.api.bookstoremanager.books.entity.Book;
 import com.api.bookstoremanager.users.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -9,6 +9,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class UsersServiceTest {
+@DisplayName("Testes unitários em UsersServiceImplTest")
+public class UsersServiceImplTest {
 
   private final UserMapper mapper = UserMapper.INSTANCE;
 
   @Mock
   private UserRepository repository;
-
   @Mock
   private PasswordEncoder passwordEncoder;
   @InjectMocks
@@ -43,6 +44,7 @@ public class UsersServiceTest {
   }
 
   @Test
+  @DisplayName("criar um novo User, se não houver nenhum cadastrado com o mesmo Email ou Username")
   void when_New_User_Is_Informed_Then_It_Should_Be_Created() {
    //@Given
     var expectedCreatedUserDTO = userDTOBuilder.buildUserDTO();
@@ -60,6 +62,7 @@ public class UsersServiceTest {
   }
 
   @Test
+  @DisplayName("Lança uma exceção se houver um User cadastrado com o mesmo Email ou Username")
   void when_Existing_User_Is_Informed_Then_An_Exception_Should_Be_Thrown() {
     //@Given
     var expectedDuplicatedUserDTO = userDTOBuilder.buildUserDTO();
@@ -72,6 +75,7 @@ public class UsersServiceTest {
   }
 
   @Test
+  @DisplayName("Exclui um User pelo ID")
   void when_Valid_User_Is_Informed_Then_It_Should_Be_Deleted() {
     //@Given
     var expectedDeletedUserDTO = userDTOBuilder.buildUserDTO();
@@ -86,6 +90,7 @@ public class UsersServiceTest {
   }
 
   @Test
+  @DisplayName("Lança exceção se o ID for inválido")
   void when_InValid_User_ID_Is_Informed_Then_It_Should_Be_Thrown() {
     //@Given
     var expectedDeletedUserDTO = userDTOBuilder.buildUserDTO();
@@ -97,6 +102,7 @@ public class UsersServiceTest {
   }
 
   @Test
+  @DisplayName("Atualiza um User se estiver cadastrado")
   void when_Existing_User_Is_Informed_Then_It_Should_Be_Updated() {
     //@Given
     var expectedUpdatedUserDTO = userDTOBuilder.buildUserDTO();
@@ -114,6 +120,7 @@ public class UsersServiceTest {
   }
 
   @Test
+  @DisplayName("Lança exceção se o User não estiver cadastrado")
   void when_Not_Existing_User_Is_Informed_Then_It_Should_Be_Thrown() {
     //@Given
     var expectedDeletedUserDTO = userDTOBuilder.buildUserDTO();

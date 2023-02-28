@@ -47,7 +47,7 @@ public class AuthorControllerTest {
     }
 
     @Test
-    @DisplayName("criar um novo author, se não houver nenhum cadastrado com o mesmo nome")
+    @DisplayName("cria um novo author, se não houver nenhum cadastrado com o mesmo nome")
     void when_POST_Is_Called_Then_Status_Created_It_Should_Be_Returned() throws Exception {
         var expectedAuthorCreatedDTO= authorDTOBuilder.buildAuthorDTO();
 

@@ -5,6 +5,7 @@ import com.api.bookstoremanager.publishers.service.PublisherServiceImpl;
 import com.api.bookstoremanager.utils.JsonCoversionUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -49,6 +50,7 @@ public class PublisherControllerTest {
   }
 
   @Test
+  @DisplayName("cria um novo Publisher, se não houver nenhum cadastrado com o mesmo nome")
   void when_Post_Is_Called_Then_Status_Created_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -68,6 +70,7 @@ public class PublisherControllerTest {
   }
 
   @Test
+  @DisplayName("Lança a exceção quando não preenchido os campos corretamente")
   void when_Post_Is_Called_Without_Required_Fields_Then_Bad_Request_Status_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -82,6 +85,7 @@ public class PublisherControllerTest {
 
 
   @Test
+  @DisplayName("Pesquisa um Publisher pelo id")
   void when_Get_By_Id_Is_Called_Then_Status_Ok_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -99,6 +103,7 @@ public class PublisherControllerTest {
   }
 
   @Test
+  @DisplayName("Lista todos os Publishers")
   void when_Get_List_Is_Called_Then_Status_Ok_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -116,6 +121,7 @@ public class PublisherControllerTest {
   }
 
   @Test
+  @DisplayName("Exclui Publisher passando o id")
   void when_Delete_Is_Called_Then_Status_NoContent_It_Should_Be_Returned() throws Exception {
     //@Given
     var expectedPublisherToDelete = publisherDTOBuilder.buildPublisherDTO();

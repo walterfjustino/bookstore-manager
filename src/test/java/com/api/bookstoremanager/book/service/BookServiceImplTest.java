@@ -1,11 +1,9 @@
 package com.api.bookstoremanager.book.service;
 
-import com.api.bookstoremanager.BookUtils;
 import com.api.bookstoremanager.author.entity.Author;
 import com.api.bookstoremanager.author.service.AuthorServiceImpl;
 import com.api.bookstoremanager.book.builder.BookRequestDTOBuilder;
 import com.api.bookstoremanager.book.builder.BookResponseDTOBuilder;
-import com.api.bookstoremanager.books.dto.BookDTO;
 import com.api.bookstoremanager.books.dto.BookRequestDTO;
 import com.api.bookstoremanager.books.dto.BookResponseDTO;
 import com.api.bookstoremanager.books.entity.Book;
@@ -22,29 +20,24 @@ import com.api.bookstoremanager.users.service.UserServiceImpl;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Testes unitários em BookServiceImplTest")
 public class BookServiceImplTest {
 
     private final BookMapper mapper = BookMapper.INSTANCE;
@@ -75,6 +68,7 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Cria um novo Livro, se não houver nenhum cadastrado com o NOME e ISBN e se estiver authenticado com o Username")
     void when_New_Book_Is_Informed_Then_It_Should_Be_Created() {
         //@Given
         BookRequestDTO expectedBookToCreateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
@@ -91,12 +85,13 @@ public class BookServiceImplTest {
         when(bookRepository.save(any(Book.class))).thenReturn(mapper.toModel(expectedCreatedBookDTO));
 
         BookResponseDTO createdBookResponseDTO = bookService.create(authenticatedUser, expectedBookToCreateDTO);
+
         //@Then
         MatcherAssert.assertThat(createdBookResponseDTO, Matchers.is(Matchers.equalTo(expectedCreatedBookDTO)));
-
     }
 
     @Test
+    @DisplayName("Lança uma Exceção se não estiver authenticado com o Username ou não houver nenhum cadastrado com o NOME e ISBN ")
     void when_Existing_Book_Is_Informed_To_Create_Then_An_Exception_Should_Be_Thrown() {
         //@Given
         BookRequestDTO expectedBookToCreateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
@@ -115,6 +110,7 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Pesquisa um livro por ID, se estiver Authenticado com o Username")
     void when_Existing_Book_Is_Informed_Then_A_Book_Should_Be_Returned() {
         //@Given
         BookRequestDTO expectedBookToFindDTO = bookRequestDTOBuilder.buildRequestBookDTO();
@@ -134,6 +130,7 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Lança uma exceção se não encontrar o ID se estiver Authenticado")
     void when_Not_Existing_Book_Is_Informed_Then_An_Exception_Should_Be_Thrown() {
         //@Given
         BookRequestDTO expectedBookToFindDTO = bookRequestDTOBuilder.buildRequestBookDTO();
@@ -151,6 +148,7 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Retorna Lista com todos os livros se estiver Authenticado com o Username")
     void when_List_Book_Is_Called_Then_ItShould_Be_Returned() {
         //@Given
         BookRequestDTO expectedBookToFindDTO = bookRequestDTOBuilder.buildRequestBookDTO();
@@ -169,6 +167,7 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Retorna Lista vazia se não houver livros cadastrados se estiver Authenticado com o Username")
     void when_List_Book_Is_Called_Then_An_Empty_List_It_Should_Be_Returned() {
         //@Given
 
@@ -183,6 +182,7 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Exclui um livro por ID se estiver Authenticado com o Username")
     void when_Existing_Book_Is_Informed_Then_It_Should_Be_Deleted() {
         //@Given
         BookResponseDTO expectedBookToDeleteDTO = bookResponseDTOBuilder.buildBookResponse();
@@ -201,6 +201,7 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Lança uma exceção se o ID do livro for inválido e se estiver Authenticado com o Username")
     void when_Not_Existing_Book_Is_Informed_Then_An_Exception_It_Should_Be_Thrown() {
         //@Given
         BookResponseDTO expectedBookToDeleteDTO = bookResponseDTOBuilder.buildBookResponse();
@@ -216,6 +217,7 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Atualiza um Livro se o ID for válido e se estiver authenticado com o Username")
     void when_Existing_Book_Is_Informed_Then_It_Should_Be_Updated() {
         //@Given
         BookRequestDTO expectedBookToUpdateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
@@ -233,10 +235,10 @@ public class BookServiceImplTest {
         BookResponseDTO updatedBookResponseDTO = bookService.updateByUser(authenticatedUser, expectedBookToUpdateDTO.getId(), expectedBookToUpdateDTO);
         //@Then
         MatcherAssert.assertThat(updatedBookResponseDTO, Matchers.is(Matchers.equalTo(expectedUpdatedBookDTO)));
-
     }
 
     @Test
+    @DisplayName("Lança uma exceção se o ID for inválido e se estiver authenticado com o Username")
     void when_Not_Existing_Book_Is_Informed_Then_An_Exception_It_Should_Be_Throw() {
         //@Given
         BookRequestDTO expectedBookToUpdateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
@@ -248,29 +250,5 @@ public class BookServiceImplTest {
 
         //@Then
         assertThrows(BookNotFoundException.class, () -> bookService.updateByUser(authenticatedUser, expectedBookToUpdateDTO.getId(), expectedBookToUpdateDTO));
-
     }
-        //@Then
-    //    @Test
-//    void whenGivenExistingIdThenReturnThisBook() throws BookNotFoundException {
-//        Book expectedFoundBook = BookUtils.createFakeBook();
-//
-//        when(bookRepository.findById(expectedFoundBook.getId())).thenReturn(Optional.of(expectedFoundBook));
-//
-//        BookDTO bookDTO = bookService.findById(expectedFoundBook.getId());
-//
-//        assertEquals(expectedFoundBook.getName(),bookDTO.getName());
-//        assertEquals(expectedFoundBook.getIsbn(),bookDTO.getIsbn());
-//        assertEquals(expectedFoundBook.getPublisher(),bookDTO.getPublisherName());
-//    }
-//
-//    @Test
-//    void whenGivenUnexistingIdThenNotFindThrowAnException() {
-//
-//        var invalidId = 10L;
-//
-//        when(bookRepository.findById(invalidId)).thenReturn(Optional.ofNullable(any(Book.class)));
-//
-//        assertThrows(BookNotFoundException.class, () ->bookService.findById(invalidId));
-//    }
 }

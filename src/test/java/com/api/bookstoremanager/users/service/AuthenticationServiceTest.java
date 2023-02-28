@@ -11,6 +11,7 @@ import com.api.bookstoremanager.users.repository.UserRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +31,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Testes unitários em AuthenticationService")
 public class AuthenticationServiceTest {
 
   private final UserMapper mapper = UserMapper.INSTANCE;
@@ -57,6 +59,7 @@ public class AuthenticationServiceTest {
   }
 
   @Test
+  @DisplayName("Gera o token se o user estiver cadastrado")
   void when_Username_And_Password_Is_Informed_Then_A_Token_Should_Be_Generated() {
     //@Given
     JwtRequest jwtRequest = jwtRequestBuilder.buildJwtRequest();
@@ -74,6 +77,7 @@ public class AuthenticationServiceTest {
   }
 
   @Test
+  @DisplayName("Pesquisa um user se estiver cadastrado")
   void when_Username_Is_Informed_Then_User_Should_Be_Returned() {
     //@Given
     var expectedFoundUserDTO = userDTOBuilder.buildUserDTO();
@@ -92,6 +96,7 @@ public class AuthenticationServiceTest {
   }
 
   @Test
+  @DisplayName("Lança exceção se o User não estiver cadastrado")
   void when_Invalid_Username_Is_Informed_Then_An_Exception_Should_Be_Thrown() {
     //@Given
     var expectedFoundUserDTO = userDTOBuilder.buildUserDTO();

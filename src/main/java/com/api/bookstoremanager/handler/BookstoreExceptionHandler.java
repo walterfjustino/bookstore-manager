@@ -36,7 +36,10 @@ public class BookstoreExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode status,
+                                                                  WebRequest request) {
         List<String> errors = new ArrayList<>();
         exception.getBindingResult()
                 .getFieldErrors()
@@ -48,31 +51,14 @@ public class BookstoreExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, "Informed argument(s) validation error(s)", errors);
     }
 
-//    @Override
-//    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        List<String> errors = new ArrayList<>();
-//        exception.getBindingResult()
-//                .getFieldErrors()
-//                .forEach(fieldError -> errors.add("Field " + fieldError.getField().toUpperCase() + " " + fieldError.getDefaultMessage()));
-//        exception.getBindingResult()
-//                .getGlobalErrors()
-//                .forEach(globalError -> errors.add("Object " + globalError.getObjectName() + " " + globalError.getDefaultMessage()));
-//
-//        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Informed argument(s) validation error(s)", errors);
-//    }
-
-
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode status,
+                                                                  WebRequest request) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, "Malformed JSON body and/or field error",
                 Collections.singletonList(exception.getLocalizedMessage()));
     }
-
-//    @Override
-//    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        return buildResponseEntity(HttpStatus.BAD_REQUEST, "Malformed JSON body and/or field error",
-//                Collections.singletonList(exception.getLocalizedMessage()));
-//    }
 
     private ResponseEntity<Object> buildResponseEntity(HttpStatus httpStatus, String message, List<String> errors){
         ApiError apiError = ApiError.builder()

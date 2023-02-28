@@ -1,28 +1,22 @@
 package com.api.bookstoremanager.book.controller;
 
-import com.api.bookstoremanager.BookUtils;
 import com.api.bookstoremanager.book.builder.BookRequestDTOBuilder;
 import com.api.bookstoremanager.book.builder.BookResponseDTOBuilder;
 import com.api.bookstoremanager.books.controller.BookController;
-import com.api.bookstoremanager.books.dto.BookDTO;
 import com.api.bookstoremanager.books.dto.BookRequestDTO;
 import com.api.bookstoremanager.books.dto.BookResponseDTO;
-import com.api.bookstoremanager.dto.MessageResponseDTO;
 import com.api.bookstoremanager.books.service.BookService;
 import com.api.bookstoremanager.users.dto.AuthenticatedUser;
-import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
@@ -34,10 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,6 +56,7 @@ public class BookControllerTest {
 
 
     @Test
+    @DisplayName("cria um novo livro, se não houver nenhum cadastrado com o mesmo nome")
     void whenPOSTIsCalledThenCreatedStatusShouldBeReturned() throws Exception {
         BookRequestDTO expectedBookToCreateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
         BookResponseDTO expectedCreatedBookDTO = bookResponseDTOBuilder.buildBookResponse();
@@ -81,6 +73,7 @@ public class BookControllerTest {
     }
 
     @Test
+    @DisplayName("Lança a exceção quando não preenche os campos corretamente")
     void whenPOSTIsCalledWithoutRequiredFieldsThenBadRequestShouldBeReturned() throws Exception {
         BookRequestDTO expectedBookToCreateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
         expectedBookToCreateDTO.setIsbn(null);
@@ -92,6 +85,7 @@ public class BookControllerTest {
     }
 
     @Test
+    @DisplayName("Pesquisa um Livro pelo id")
     void when_GET_With_Valid_ID_Is_Called_Then_Status_OK_It_Should_Be_Returned() throws Exception {
         BookRequestDTO expectedBookToFindDTO = bookRequestDTOBuilder.buildRequestBookDTO();
         BookResponseDTO expectedFoundBookDTO = bookResponseDTOBuilder.buildBookResponse();
@@ -107,6 +101,7 @@ public class BookControllerTest {
     }
 
     @Test
+    @DisplayName("Lista todos os Livros")
     void when_GET_List_Is_Called_Then_Status_OK_It_Should_Be_Returned() throws Exception {
         BookResponseDTO expectedFoundBookDTO = bookResponseDTOBuilder.buildBookResponse();
 
@@ -121,6 +116,7 @@ public class BookControllerTest {
     }
 
     @Test
+    @DisplayName("Exclui um livro passando o id")
     void when_DELETE_Is_Called_With_Valid_ID_Is_Called_Then_Status_No_Content_It_Should_Be_Returned() throws Exception {
         BookRequestDTO expectedBookToDeleteDTO = bookRequestDTOBuilder.buildRequestBookDTO();
         BookResponseDTO expectedFoundBookDTO = bookResponseDTOBuilder.buildBookResponse();
@@ -133,6 +129,7 @@ public class BookControllerTest {
     }
 
     @Test
+    @DisplayName("Atualiza um livro")
     void whenPUTIsCalledThenOKStatusShouldBeReturned() throws Exception {
         BookRequestDTO expectedBookToUpdateDTO = bookRequestDTOBuilder.buildRequestBookDTO();
         BookResponseDTO expectedUpdatedBookDTO = bookResponseDTOBuilder.buildBookResponse();
@@ -148,35 +145,4 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.name", is(expectedUpdatedBookDTO.getName())))
                 .andExpect(jsonPath("$.isbn", is(expectedUpdatedBookDTO.getIsbn())));
     }
-
-
-//    @Test
-//    void testWhenPostIsCalledThenABookShouldBeCreated() throws Exception {
-//        BookDTO bookDTO = BookUtils.createFakeBookDTO();
-//        MessageResponseDTO expectedMessageResponse = MessageResponseDTO.builder()
-//                .message("Book created with ID" + bookDTO.getId())
-//                .build();
-//
-//        Mockito.when(bookService.create(bookDTO)).thenReturn(expectedMessageResponse);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/books")
-//        .contentType(MediaType.APPLICATION_JSON)
-//        .content(BookUtils.asJsonString(bookDTO)))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(expectedMessageResponse.getMessage())));
-//    }
-//
-//
-//    @Test
-//    void testWhenPostWithInvalidISBNIsCalledThenBadRequestShouldBeReturn() throws Exception {
-//        BookDTO bookDTO = BookUtils.createFakeBookDTO();
-//        bookDTO.setIsbn("Invalid ISBN");
-//
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/books")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(BookUtils.asJsonString(bookDTO)))
-//                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-//
-//    }
 }

@@ -18,7 +18,6 @@ public class PublisherController implements PublisherControllerDocs {
   @Autowired
   private PublisherServiceImpl service;
 
-
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @Override
@@ -44,5 +43,4 @@ public class PublisherController implements PublisherControllerDocs {
   public void delete(@PathVariable Long id) {
     service.delete(id);
   }
-
 }

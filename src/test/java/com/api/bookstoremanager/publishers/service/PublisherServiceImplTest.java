@@ -23,8 +23,8 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("PublisherServiceImplTest")
-public class PublisherServiceTest {
+@DisplayName("Testes unitários em PublisherServiceImplTest")
+public class PublisherServiceImplTest {
 
   private static final PublisherMapper mapper = PublisherMapper.INSTANCE;
 
@@ -42,6 +42,7 @@ public class PublisherServiceTest {
   }
 
   @Test
+  @DisplayName("criar um novo Publisher, se não houver nenhum cadastrado com o mesmo nome ou código")
   void when_New_Publisher_Is_Informed_Then_It_Should_Be_Created() {
     //@Given
     var expectedPublisherToCreatedDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -58,6 +59,7 @@ public class PublisherServiceTest {
   }
 
   @Test
+  @DisplayName("Lança exceção se já houver algum cadastrado com o mesmo nome ou código")
   void when_Existing_Publisher_Is_Informed_Then_An_Exception_Should_Be_Thrown() {
     //@Given
     var expectedPublisherToCreatedDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -72,6 +74,7 @@ public class PublisherServiceTest {
   }
 
   @Test
+  @DisplayName("Pesquisa um Publisher por ID")
   void when_Valid_Id_Is_Given_Then_A_Publisher_It_Should_Be_Returned() {
     //@Given
     var expectedPublisherFoundDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -88,6 +91,7 @@ public class PublisherServiceTest {
   }
 
   @Test
+  @DisplayName("Lança exceção quando ID não for encontrado")
   void when_Invalid_Id_Is_Given_Then_An_Exception_Should_Be_Thrown() {
     //@Given
     var expectedPublisherFoundDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -102,6 +106,7 @@ public class PublisherServiceTest {
   }
 
   @Test
+  @DisplayName("Retorna uma Lista com todos os Publishers")
   void when_List_Publishers_Is_Called_Then_It_Should_Be_Returned() {
     //@Given
     var expectedPublisherFoundDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -118,6 +123,7 @@ public class PublisherServiceTest {
   }
 
   @Test
+  @DisplayName("Retorna uma Lista vazia caso não encontrar nenhum Publisher cadastrado")
   void when_List_Publishers_Is_Called_Then_An_Empty_List_It_Should_Be_Returned() {
     //@Given is empty, because the simulating an empty list
 
@@ -130,6 +136,7 @@ public class PublisherServiceTest {
 }
 
   @Test
+  @DisplayName("Exclui um Publisher por ID")
   void when_Valid_PublisherId_Is_Given_Then_It_Should_Be_Deleted() {
     //@Given
     var expectedPublisherDeletedDTO = publisherDTOBuilder.buildPublisherDTO();
@@ -145,15 +152,15 @@ public class PublisherServiceTest {
   }
 
   @Test
+  @DisplayName("Lança uma exceção se o ID não for válido")
   void when_Invalid_PublisherId_Is_Given_Then_It_Should_Be_Deleted() {
     //@Given
     var expectedInvalidPublisherId = 2L;
+
     //@When
     when(repository.findById(expectedInvalidPublisherId)).thenReturn(Optional.empty());
 
-
     //@Then
    assertThrows(PublisherNotFoundException.class, () -> service.delete(expectedInvalidPublisherId));
-
   }
 }

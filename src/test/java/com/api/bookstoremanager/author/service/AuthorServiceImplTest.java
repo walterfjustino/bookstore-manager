@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("AuthorServiceImplTest")
+@DisplayName("Testes unitários em AuthorServiceImplTest")
 public class AuthorServiceImplTest {
 
     public static final AuthorMapper mapper = AuthorMapper.INSTANCE;
@@ -44,7 +44,7 @@ public class AuthorServiceImplTest {
     }
 
     @Test
-    @DisplayName("criar um novo usuario, se não houver nenhum cadastrado com o mesmo nome")
+    @DisplayName("criar um novo Author, se não houver nenhum cadastrado com o mesmo nome")
     void when_New_Author_Is_Informed_Then_It_Should_Be_Created() {
         // @Given
         AuthorDTO expectedAuthorToCreateDTO = authorDtoBuilder.buildAuthorDTO();
@@ -60,7 +60,7 @@ public class AuthorServiceImplTest {
     }
 
     @Test
-    @DisplayName("Lança a exceção quando encontrado que o usuario a ser incluido já existe")
+    @DisplayName("Lança a exceção quando encontrado que o author a ser incluido já existe")
     void when_Existing_Author_Is_Informed_Then_An_Exception_It_Should_Be_Throw() {
         // @Given
         AuthorDTO expectedAuthorToCreateDTO = authorDtoBuilder.buildAuthorDTO();

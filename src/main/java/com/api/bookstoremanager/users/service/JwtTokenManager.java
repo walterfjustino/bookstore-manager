@@ -26,7 +26,6 @@ public class JwtTokenManager {
   public String generateToken(UserDetails userDetails){
     Map<String, Object> claims = new HashMap<>();
     return doGenerateToken(userDetails.getUsername(), claims);
-
   }
 
   private String doGenerateToken(String username, Map<String, Object> claims) {
@@ -40,12 +39,10 @@ public class JwtTokenManager {
   }
 
   public String getUsernameFromToken(String token){
-
     return getClaimForToken(token, Claims::getSubject);
   }
 
   public Date getExpirationDateFromToken(String token){
-
     return getClaimForToken(token, Claims::getExpiration);
   }
 
@@ -76,5 +73,4 @@ public class JwtTokenManager {
     byte[] keyBytes = Decoders.BASE64.decode(secret);
     return Keys.hmacShaKeyFor(keyBytes);
   }
-
 }

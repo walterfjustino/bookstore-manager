@@ -1,8 +1,6 @@
 package com.api.bookstoremanager.books.service;
 
-import com.api.bookstoremanager.author.entity.Author;
 import com.api.bookstoremanager.author.service.AuthorServiceImpl;
-import com.api.bookstoremanager.books.dto.BookDTO;
 import com.api.bookstoremanager.books.dto.BookRequestDTO;
 import com.api.bookstoremanager.books.dto.BookResponseDTO;
 import com.api.bookstoremanager.books.entity.Book;
@@ -10,8 +8,6 @@ import com.api.bookstoremanager.books.exception.BookAlreadyExistsException;
 import com.api.bookstoremanager.books.exception.BookNotFoundException;
 import com.api.bookstoremanager.books.mapper.BookMapper;
 import com.api.bookstoremanager.books.repository.BookRepository;
-import com.api.bookstoremanager.dto.MessageResponseDTO;
-import com.api.bookstoremanager.publishers.entity.Publisher;
 import com.api.bookstoremanager.publishers.service.PublisherServiceImpl;
 import com.api.bookstoremanager.users.dto.AuthenticatedUser;
 import com.api.bookstoremanager.users.entity.User;
@@ -40,20 +36,6 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private PublisherServiceImpl publisherService;
 
-
-
-//    @Override
-//    public MessageResponseDTO create(,BookDTO bookDTO){
-//
-//        Book bookToSave = mapper.toModel(bookDTO);
-//
-//        Book savedBook = bookRepository.save(bookToSave);
-//        return MessageResponseDTO.builder()
-//                .message("Book created with ID " + savedBook.getId())
-//                .build();
-//    }
-
-
     @Override
     public BookResponseDTO create(AuthenticatedUser authenticatedUser, BookRequestDTO bookRequestDTO) {
         var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
@@ -76,15 +58,6 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
 
-
-
-//    @Override
-//    public BookDTO findById(Long id) throws BookNotFoundException {
-//        var book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-//        return null;
-//    }
-
-
     @Override
     public List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser) {
         var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
@@ -93,6 +66,7 @@ public class BookServiceImpl implements BookService {
                 .map(mapper::toDTO)
                 .toList();
     }
+
     @Transactional
     @Override
     public void deleteByIdAndUser(AuthenticatedUser authenticatedUser, Long id) {
@@ -101,7 +75,6 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteByIdAndUser(foundBookToDelete.getId(), foundAuthenticatedUser);
 
     }
-
     @Override
     public BookResponseDTO updateByUser(AuthenticatedUser authenticatedUser, Long id, BookRequestDTO bookRequestDTO) {
         var foundAuthenticatedUser = userService.verifyAndGetUserIfExists(authenticatedUser.getUsername());
