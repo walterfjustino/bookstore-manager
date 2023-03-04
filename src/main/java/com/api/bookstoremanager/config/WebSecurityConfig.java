@@ -33,7 +33,7 @@ public class WebSecurityConfig {
   private static final String ROLE_ADMIN = Role.ADMIN.getDescription();
   private static final String ROLE_USER = Role.USER.getDescription();
 
-  private static final String[] SWAGGER_RESOURCES = {
+  private static final String[] SPRINGDOC_RESOURCES = {
           // -- swagger ui
           "/v2/api-docs",
           "/swagger-resources",
@@ -78,6 +78,6 @@ public class WebSecurityConfig {
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer () throws Exception {
-    return web -> web.ignoring().requestMatchers(SWAGGER_RESOURCES);
+    return web -> web.ignoring().requestMatchers(SPRINGDOC_RESOURCES);
   }
 }
