@@ -15,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Arrays;
+
 
 @Configuration
 @EnableWebSecurity
@@ -39,7 +41,9 @@ public class WebSecurityConfig {
           "/configuration/ui",
           "/configuration/security",
           "/swagger-ui.html",
-          "/webjars/**"
+          "/webjars/**",
+          "/v3/api-docs/**",
+          "/swagger-ui/**"
   };
 
   @Autowired
@@ -59,7 +63,7 @@ public class WebSecurityConfig {
     return httpSecurity.csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .authorizeHttpRequests().requestMatchers(USERS_API_URL,H2_CONSOLE_URL,SWAGGER_URL).permitAll()
+            .authorizeHttpRequests().requestMatchers(USERS_API_URL,H2_CONSOLE_URL, SWAGGER_URL).permitAll()
             .requestMatchers(PUBLISHERS_API_URL,AUTHORS_API_URL).hasAnyRole(ROLE_ADMIN)
             .requestMatchers(BOOKS_API_URL).hasAnyRole(ROLE_ADMIN, ROLE_USER)
             .anyRequest().authenticated()

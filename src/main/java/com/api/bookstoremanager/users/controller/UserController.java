@@ -1,5 +1,6 @@
 package com.api.bookstoremanager.users.controller;
 
+import com.api.bookstoremanager.users.docs.UserControllerDocs;
 import com.api.bookstoremanager.users.dto.JwtRequest;
 import com.api.bookstoremanager.users.dto.JwtResponse;
 import com.api.bookstoremanager.users.dto.MessageDTO;

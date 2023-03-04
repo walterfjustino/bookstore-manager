@@ -3,46 +3,50 @@ package com.api.bookstoremanager.books.docs;
 import com.api.bookstoremanager.books.dto.BookRequestDTO;
 import com.api.bookstoremanager.books.dto.BookResponseDTO;
 import com.api.bookstoremanager.users.dto.AuthenticatedUser;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 import java.util.List;
 
+@Tag(name = "Books", description = "Books management")
 public interface BookControllerDocs {
 
-    @ApiOperation(value = "Book creation operation")
+    @Operation(description = "Book creation operation", security = @SecurityRequirement(name = "token"))
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Success book creation"),
-            @ApiResponse(code = 400, message = "Missing required fields, wrong field range value or book already registered on system")
+            @ApiResponse(responseCode = "201", description = "Success book creation"),
+            @ApiResponse(responseCode = "400", description = "Missing required fields, wrong field range value or book already registered on system")
     })
     BookResponseDTO create(AuthenticatedUser authenticatedUser, BookRequestDTO bookRequestDTO);
 
-    @ApiOperation(value = "Book find by id and user operation")
+    @Operation(description = "Book find by id and user operation", security = @SecurityRequirement(name = "token"))
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success book found"),
-            @ApiResponse(code = 404, message = "Book not found error")
+            @ApiResponse(responseCode = "200", description = "Success book found"),
+            @ApiResponse(responseCode = "404", description = "Book not found error")
     })
     BookResponseDTO findByIdAndUser(AuthenticatedUser authenticatedUser, Long id);
 
-    @ApiOperation(value = "List all books by a specific authenticated user")
+    @Operation(description = "List all books by a specific authenticated user", security = @SecurityRequirement(name = "token"))
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Book list found by authenticated user informed")
+            @ApiResponse(responseCode = "200", description = "Book list found by authenticated user informed")
     })
     List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser);
 
-    @ApiOperation(value = "Book update operation")
+    @Operation(description = "Book update operation", security = @SecurityRequirement(name = "token"))
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Book by user successfully updated"),
-            @ApiResponse(code = 404, message = "Book not found error"),
-            @ApiResponse(code = 400, message = "Missing required fields, wrong field range value or book already registered on system")
+            @ApiResponse(responseCode = "200", description = "Book by user successfully updated"),
+            @ApiResponse(responseCode = "404", description = "Book not found error"),
+            @ApiResponse(responseCode = "400", description = "Missing required fields, wrong field range value or book already registered on system")
     })
     BookResponseDTO updateByUser(AuthenticatedUser authenticatedUser, Long id, BookRequestDTO bookRequestDTO);
 
-    @ApiOperation(value = "Book delete operation")
+    @Operation(description = "Book delete operation", security = @SecurityRequirement(name = "token"))
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Book by user successfully deleted"),
-            @ApiResponse(code = 404, message = "Book not found error")
+            @ApiResponse(responseCode = "204", description = "Book by user successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Book not found error")
     })
     void deleteByIdAndUser(AuthenticatedUser authenticatedUser, Long id);
 }

@@ -1,5 +1,6 @@
 package com.api.bookstoremanager.publishers.controller;
 
+import com.api.bookstoremanager.publishers.docs.PublisherControllerDocs;
 import com.api.bookstoremanager.publishers.dto.PublisherDTO;
 import com.api.bookstoremanager.publishers.service.PublisherServiceImpl;
 import lombok.AllArgsConstructor;
