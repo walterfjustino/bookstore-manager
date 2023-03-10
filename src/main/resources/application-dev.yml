@@ -25,7 +25,8 @@ jwt:
 #  secret: ${JWT_SECRET:bookstoremanager}
   validity: 18000
 
-#springdoc:
+springdoc:
+  show-actuator: true
 #  use-management-port: true
 #
 #server:

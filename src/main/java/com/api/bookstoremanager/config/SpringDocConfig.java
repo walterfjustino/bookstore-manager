@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
         name = "token",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
-        scheme = "bearer")
+        scheme = "Bearer")
 public class SpringDocConfig {
 
     public static final String BASE_PACKAGE = "com.api.bookstoremanager";
@@ -53,23 +53,4 @@ public class SpringDocConfig {
                                 .email(CONTACT_EMAIL)
                                 .url(CONTACT_GITHUB)));
     }
-
-//    @Bean
-//    public Docket api() {
-//
-//        return new Docket(DocumentationType.SWAGGER_2)
-//                .select()
-//                .apis(RequestHandlerSelectors.basePackage(BASE_PACKAGE))
-//                .paths(PathSelectors.any())
-//                .build().apiInfo(buildApiInfo());
-//    }
-//
-//    private ApiInfo buildApiInfo() {
-//        return new ApiInfoBuilder()
-//                .title(API_TITLE)
-//                .description(API_DESCRIPTION)
-//                .version(API_VERSION)
-//                .contact(new Contact(CONTACT_NAME, CONTACT_GITHUB, CONTACT_EMAIL))
-//                .build();
-//    }
 }

@@ -41,7 +41,9 @@ public class WebSecurityConfig {
           "/swagger-ui.html",
           "/webjars/**",
           "/v3/api-docs/**",
-          "/swagger-ui/**"
+          "/swagger-ui/**",
+          "/h2-console/**",
+          "/actuator"
   };
 
   @Autowired
@@ -58,7 +60,7 @@ public class WebSecurityConfig {
 
   @Bean
   protected  SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception {
-    return httpSecurity.csrf().disable()
+    return httpSecurity.csrf().ignoringRequestMatchers(H2_CONSOLE_URL).disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests().requestMatchers(USERS_API_URL,H2_CONSOLE_URL, SWAGGER_URL).permitAll()

@@ -5,7 +5,7 @@ O objetivo do projeto Bookstore API Manager é disponibilizar uma API para cadas
 
 Durante o projeto, são abordados os seguintes tópicos:
 
-* Setup inicial de projeto com o Spring Boot Initialzr.
+* Setup inicial de projeto com o Spring Boot Initializr.
 * Criação de modelo de dados para o mapeamento de entidades em bancos de dados.
 * Desenvolvimento de operações de gerenciamento de usuários, livros, autores e editora.
 * Desenvolvimento de autenticaçao e autorização de usuários através do Spring Security, e com suporte a JWT.
